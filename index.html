@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Brioche — French and Japanese inspired, Queensferry Street, Edinburgh</title>
+<meta name="description" content="Brioche. A café and sober bar in Edinburgh's West End. French and Japanese fusion, East Asian specialty coffee, afternoon tea. Opening this September at 10B Queensferry Street.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="alternate icon" href="assets/favicon.png" type="image/png">
+<meta property="og:title" content="Brioche — Queensferry Street, Edinburgh">
+<meta property="og:description" content="A café and sober bar in Edinburgh's West End. French and Japanese fusion, East Asian specialty coffee.">
+<meta property="og:image" content="assets/og-image.png">
+<meta property="og:type" content="website">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   BRIOCHE — demo build by Barker Digital
+   Brand colours sampled from BRIOCHE LOGO FINAL.png
+   Menu content transcribed from the two menu artworks
+   ============================================================ */
+
+:root{
+  --crust:#7A2F00;   /* logo brown */
+  --butter:#FFD699;  /* logo lettering */
+  --cream:#FFE7C2;   /* logo background */
+  --char:#4A1C00;    /* body text, footer */
+  --milk:#FFF3DF;    /* card surface */
+
+  --matcha:#545226;     --matcha-lt:#DCDCA8;
+  --jam:#9E3A4E;        --jam-lt:#F5C4CE;
+
+  --display:'Gaegu','Comic Sans MS',cursive;
+  --body:'Quicksand',system-ui,-apple-system,sans-serif;
+
+  --spring:cubic-bezier(.34,1.56,.64,1);
+  --ease:cubic-bezier(.22,.61,.36,1);
+  --pad:clamp(20px,5vw,72px);
+  --logo-ratio:1.48;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:var(--body);background:var(--cream);color:var(--char);line-height:1.65;overflow-x:hidden;font-weight:500}
+body.loading{overflow:hidden}
+img,svg{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
+::selection{background:var(--crust);color:var(--butter)}
+
+/* ---------- load sequence ---------- */
+#curtain{position:fixed;inset:0;z-index:990;background:var(--cream)}
+#curtain.gone{display:none}
+#curtainSkip{position:fixed;inset:0;z-index:991;width:100%;height:100%;background:none;border:0;font-size:0;color:transparent;cursor:default}
+#curtainSkip.gone{display:none}
+.hero__logo.flying{position:relative;z-index:995;pointer-events:none}
+body.loading .hero__logo{opacity:0}
+body.loading .hero{overflow:visible}
+/* no opacity on .page: it would make a stacking context and trap the logo */
+.page{opacity:1}
+
+/* ---------- type ---------- */
+.h-lg{font-family:var(--display);font-weight:700;font-size:clamp(2.3rem,6vw,4.2rem);line-height:.98;letter-spacing:-.035em}
+.h-md{font-family:var(--display);font-weight:700;font-size:clamp(1.8rem,3.8vw,2.7rem);line-height:1.02;letter-spacing:-.03em}
+.lede{font-size:clamp(1.05rem,2vw,1.32rem);line-height:1.6}
+.eyebrow{font-size:.72rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;opacity:.62}
+.tabular{font-variant-numeric:tabular-nums}
+
+/* ---------- shell ---------- */
+.wrap{max-width:1180px;margin:0 auto;padding-left:var(--pad);padding-right:var(--pad)}
+.wrap--narrow{max-width:940px}
+.slice{position:relative;padding:clamp(70px,10vw,132px) 0}
+.slice--brown{background:var(--crust);color:var(--cream)}
+.slice--cream{background:var(--cream);color:var(--char)}
+.slice--matcha{background:var(--matcha);color:var(--cream)}
+
+/* ---------- loaf-dome divider ---------- */
+.dome{display:block;width:100%;height:clamp(46px,7vw,104px);margin-bottom:-1px;color:var(--crust)}
+.dome--matcha{color:var(--matcha)}
+.dome svg{width:100%;height:100%;display:block}
+
+/* ---------- nav ---------- */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:80;
+  display:flex;align-items:center;gap:18px;padding:12px var(--pad);
+  background:rgba(255,231,194,.9);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(122,47,0,.13);transition:transform .4s var(--ease);
+}
+.nav__mark{flex-shrink:0;line-height:0;color:var(--crust)}
+.nav__mark img{height:40px;width:auto}
+.nav__links{display:flex;gap:24px;margin-left:auto;align-items:center}
+.nav__links a{font-size:.9rem;font-weight:600;position:relative;padding:4px 0;white-space:nowrap}
+.nav__links a::after{content:'';position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--crust);border-radius:2px;transform:scaleX(0);transform-origin:left;transition:transform .3s var(--spring)}
+.nav__links a:hover::after,.nav__links a[aria-current="page"]::after{transform:scaleX(1)}
+.nav__links .btn::after{display:none}
+
+.burger{display:none;margin-left:auto;padding:8px;line-height:0}
+.burger span{display:block;width:24px;height:2.5px;background:var(--crust);border-radius:2px;margin:5px 0;transition:transform .3s var(--spring),opacity .2s}
+.burger[aria-expanded="true"] span:nth-child(1){transform:translateY(7.5px) rotate(45deg)}
+.burger[aria-expanded="true"] span:nth-child(2){opacity:0}
+.burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-7.5px) rotate(-45deg)}
+
+/* ---------- buttons ---------- */
+.btn{
+  display:inline-flex;align-items:center;gap:10px;padding:15px 30px;border-radius:999px;
+  font-weight:700;font-size:.98rem;white-space:nowrap;
+  transition:transform .35s var(--spring),background .25s,color .25s,box-shadow .35s var(--spring);will-change:transform;
+}
+.btn--solid{background:var(--crust);color:var(--butter);box-shadow:0 4px 0 rgba(74,28,0,.3)}
+.btn--solid:hover{transform:translateY(-4px);box-shadow:0 9px 0 rgba(74,28,0,.3)}
+.btn--solid:active{transform:translateY(1px) scaleX(1.04) scaleY(.94);box-shadow:0 1px 0 rgba(74,28,0,.3)}
+.btn--ghost{background:transparent;color:var(--crust);box-shadow:inset 0 0 0 2.5px var(--crust)}
+.btn--ghost:hover{transform:translateY(-4px);background:var(--crust);color:var(--butter)}
+.btn--ghost:active{transform:translateY(1px) scaleX(1.04) scaleY(.94)}
+.slice--brown .btn--solid,.slice--matcha .btn--solid{background:var(--butter);color:var(--crust);box-shadow:0 4px 0 rgba(0,0,0,.24)}
+.slice--brown .btn--solid:hover,.slice--matcha .btn--solid:hover{box-shadow:0 9px 0 rgba(0,0,0,.24)}
+.slice--brown .btn--ghost{color:var(--cream);box-shadow:inset 0 0 0 2.5px var(--butter)}
+.slice--brown .btn--ghost:hover{background:var(--butter);color:var(--crust)}
+.slice--matcha .btn--ghost{color:var(--cream);box-shadow:inset 0 0 0 2.5px var(--matcha-lt)}
+.slice--matcha .btn--ghost:hover{background:var(--matcha-lt);color:var(--matcha)}
+.btn-row{display:flex;flex-wrap:wrap;gap:14px;margin-top:32px}
+:focus-visible{outline:3px solid var(--butter);outline-offset:3px;border-radius:6px}
+.slice--cream :focus-visible{outline-color:var(--crust)}
+
+/* ---------- hero ---------- */
+.hero{min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:96px 0 64px;position:relative;overflow:hidden;text-align:center}
+.hero .wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;flex-grow:1;position:relative;width:100%}
+.hero__logo{width:min(72vw, calc(52svh * var(--logo-ratio)));height:auto;flex:0 0 auto}
+.hero__logo.settled{animation:float 7s ease-in-out infinite}
+@keyframes float{0%,100%{translate:0 0}50%{translate:0 -12px}}
+.hero__tag{font-family:var(--display);font-weight:700;font-size:clamp(1.3rem,3vw,2rem);letter-spacing:-.02em;color:var(--crust);margin-top:clamp(14px,2vw,22px)}
+.hero__addr{margin-top:14px;font-size:.95rem;font-weight:600;opacity:.72}
+.hero .btn-row{justify-content:center;margin-top:clamp(26px,3.4vw,38px)}
+.hero__cue{position:absolute;left:50%;bottom:24px;translate:-50% 0;display:flex;flex-direction:column;align-items:center;gap:7px;font-size:.68rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;opacity:.5}
+.hero__cue svg{width:15px;animation:nudge 1.9s var(--spring) infinite}
+@keyframes nudge{0%,100%{translate:0 0}50%{translate:0 6px}}
+
+.drift{position:absolute;pointer-events:none;opacity:.11;color:var(--crust);z-index:0}
+.drift--cupL{width:118px;top:23%;left:7%;color:var(--matcha);opacity:.16;animation:driftB 11s ease-in-out infinite}
+.drift--cupR{width:94px;bottom:22%;right:8%;color:var(--jam);opacity:.14;animation:driftB 13s ease-in-out infinite reverse}
+@keyframes driftB{0%,100%{translate:0 0;rotate:5deg}50%{translate:-14px -22px;rotate:-5deg}}
+@media(max-width:1050px){.drift{display:none}}
+
+/* ---------- marquee ---------- */
+.ribbon{background:var(--crust);color:var(--butter);padding:17px 0;overflow:hidden;white-space:nowrap}
+.ribbon__track{display:inline-flex;gap:44px;animation:slide 34s linear infinite;will-change:transform}
+.ribbon__track span{font-family:var(--display);font-weight:700;font-size:clamp(1.4rem,3vw,2.2rem);letter-spacing:-.02em}
+.ribbon__track span:nth-child(3n+2){color:var(--matcha-lt)}
+.ribbon__track span:nth-child(3n+3){color:var(--jam-lt)}
+.ribbon__track span::after{content:'●';font-family:var(--body);font-size:.42em;vertical-align:middle;margin-left:44px;opacity:.5}
+@keyframes slide{to{transform:translateX(-50%)}}
+
+/* ---------- reveal ---------- */
+.rise{opacity:0;transform:translateY(30px) scale(.975);transition:opacity .7s var(--ease),transform .8s var(--spring);transition-delay:var(--d,0ms)}
+.rise.in{opacity:1;transform:none}
+
+/* ---------- three-up ---------- */
+.beats{display:grid;gap:clamp(26px,3.6vw,48px);grid-template-columns:repeat(auto-fit,minmax(230px,1fr));margin-top:54px}
+.beat{padding-top:22px;border-top:2px solid var(--butter)}
+.beats .beat:nth-child(2){border-top-color:var(--matcha-lt)}
+.beats .beat:nth-child(3){border-top-color:var(--jam-lt)}
+.beat__when{font-family:var(--display);font-weight:700;font-size:1.5rem;color:var(--butter);letter-spacing:-.02em;line-height:1}
+.beats .beat:nth-child(2) .beat__when{color:var(--matcha-lt)}
+.beats .beat:nth-child(3) .beat__when{color:var(--jam-lt)}
+.beat h3{font-family:var(--display);font-weight:700;font-size:1.75rem;margin:8px 0;line-height:1.08;letter-spacing:-.03em}
+.beat p{opacity:.85;font-size:1rem}
+
+/* ---------- cards ---------- */
+.day{display:grid;gap:clamp(20px,2.6vw,30px);grid-template-columns:repeat(auto-fit,minmax(285px,1fr));margin-top:54px}
+.card{background:var(--milk);border-radius:26px;padding:clamp(26px,3.3vw,38px);display:flex;flex-direction:column;box-shadow:0 3px 0 rgba(122,47,0,.18);transition:transform .45s var(--spring),box-shadow .45s var(--spring)}
+.card:hover{transform:translateY(-8px);box-shadow:0 12px 0 rgba(122,47,0,.18)}
+.card__time{display:inline-block;font-weight:700;font-size:.76rem;letter-spacing:.14em;background:var(--butter);color:var(--char);padding:6px 13px;border-radius:999px;align-self:flex-start}
+.day .card:nth-child(1){background:#FFF9EF}
+.day .card:nth-child(2){background:#FFF4E2}
+.day .card:nth-child(3){background:#FFEED4}
+.day .card:nth-child(2) .card__time{background:#F5CE8A}
+.day .card:nth-child(3) .card__time{background:#EBC079}
+.day .card h3{color:var(--crust)}
+.card h3{font-family:var(--display);font-weight:700;font-size:2.05rem;margin:15px 0 10px;line-height:1;letter-spacing:-.03em}
+.card p{opacity:.85;flex-grow:1}
+.card .btn{margin-top:22px;align-self:flex-start}
+
+/* ---------- menu blocks ---------- */
+.menu-head{text-align:center;max-width:46ch;margin:0 auto}
+.menu-group{margin-top:clamp(46px,6vw,76px)}
+.menu-group__top{text-align:center}
+.menu-group h2{font-family:var(--display);font-weight:700;font-size:clamp(2rem,4.6vw,3.2rem);line-height:1;letter-spacing:-.035em;color:var(--crust)}
+.slice--brown .menu-group h2,.slice--matcha .menu-group h2{color:var(--butter)}
+.menu-group__note{font-size:.94rem;opacity:.72;margin-top:6px}
+.menu-list{list-style:none;margin-top:clamp(22px,3vw,34px);display:grid;gap:2px;max-width:760px;margin-left:auto;margin-right:auto}
+.mi{display:flex;align-items:baseline;gap:10px;padding:13px 4px;border-bottom:1px dashed rgba(122,47,0,.22)}
+.slice--brown .mi,.slice--matcha .mi{border-bottom-color:rgba(255,231,194,.24)}
+.mi:last-child{border-bottom:0}
+.mi__name{font-weight:600}
+.mi__dots{flex:1 1 auto;min-width:16px}
+.mi__price{font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums}
+.tag{display:inline-block;font-size:.62rem;font-weight:700;letter-spacing:.1em;padding:3px 7px;border-radius:999px;vertical-align:.12em;margin-left:7px;background:var(--matcha-lt);color:var(--matcha)}
+.tag--v{background:var(--jam-lt);color:var(--jam)}
+.price-flag{display:inline-block;font-family:var(--display);font-weight:700;font-size:1.9rem;letter-spacing:-.03em;line-height:1;margin-top:4px}
+
+.plain-list{list-style:none;display:flex;flex-wrap:wrap;justify-content:center;gap:8px 10px;margin-top:20px;max-width:760px;margin-left:auto;margin-right:auto}
+.plain-list li{font-size:.95rem;font-weight:600;padding:7px 15px;border-radius:999px;background:rgba(255,231,194,.14)}
+.slice--cream .plain-list li{background:var(--milk)}
+
+.split{display:grid;gap:clamp(24px,3vw,40px);grid-template-columns:1fr;margin-top:clamp(22px,3vw,34px)}
+@media(min-width:820px){.split{grid-template-columns:1fr 1fr}}
+.panel{background:rgba(255,231,194,.1);border-radius:24px;padding:clamp(24px,3vw,34px)}
+.slice--cream .panel{background:var(--milk)}
+.panel h3{font-family:var(--display);font-weight:700;font-size:1.75rem;letter-spacing:-.03em;line-height:1;margin-bottom:4px;text-align:center}
+.panel__note{font-size:.86rem;opacity:.68;text-align:center;margin-bottom:16px}
+.panel ul{list-style:none;display:grid;gap:11px}
+.panel li{font-size:.97rem;font-weight:600;line-height:1.45;padding-left:18px;position:relative}
+.panel li::before{content:'';position:absolute;left:0;top:.62em;width:7px;height:7px;border-radius:50%;background:var(--butter)}
+.panel--veg li::before{background:var(--matcha-lt)}
+.panel--sweet li::before{background:var(--jam-lt)}
+.tea-head{text-align:center;max-width:48ch;margin:0 auto}
+.tea-head h2{font-family:var(--display);font-weight:700;font-size:clamp(2.2rem,5vw,3.4rem);line-height:1;letter-spacing:-.035em;color:var(--crust);margin-top:8px}
+.tea-price{font-family:var(--display);font-weight:700;font-size:clamp(1.3rem,2.6vw,1.8rem);letter-spacing:-.02em;line-height:1.25;margin-top:12px}
+.tea-book{font-size:.92rem;opacity:.7;margin-top:10px}
+.tea-grid{display:grid;gap:clamp(20px,2.6vw,28px);grid-template-columns:1fr;margin-top:clamp(34px,4vw,52px)}
+@media(min-width:760px){.tea-grid{grid-template-columns:1fr 1fr}}
+@media(min-width:1040px){.tea-grid{grid-template-columns:repeat(3,1fr)}}
+.tea-col{background:var(--milk);border-radius:22px;padding:clamp(22px,2.6vw,30px);box-shadow:0 3px 0 rgba(122,47,0,.14)}
+.tea-col--veg{background:#FFF6E8}
+.tea-col--sweet{background:#FFF1DA}
+.tea-col h3{font-family:var(--display);font-weight:700;font-size:1.6rem;letter-spacing:-.03em;line-height:1;color:var(--crust)}
+.tea-col__note{font-size:.68rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;opacity:.5;margin-top:6px}
+.tea-col ul{list-style:none;display:grid;gap:0;margin-top:16px}
+.tea-col li{font-size:.9rem;font-weight:500;line-height:1.5;padding:9px 0;border-bottom:1px solid rgba(122,47,0,.14)}
+.tea-col li:last-child{border-bottom:0}
+.tea-col__foot{font-size:.7rem;opacity:.5;margin-top:14px;line-height:1.6}
+.tea-or{text-align:center;font-family:var(--display);font-weight:700;font-size:1.05rem;letter-spacing:.02em;color:var(--crust);margin-top:16px}
+.tea-teas{font-size:.9rem;font-weight:500;line-height:1.6;margin-top:14px;opacity:.85}
+.allergen-key{margin-top:clamp(44px,6vw,72px);padding-top:26px;border-top:1px solid rgba(122,47,0,.2);font-size:.84rem;opacity:.75;text-align:center;line-height:1.7}
+.slice--brown .allergen-key,.slice--matcha .allergen-key{border-top-color:rgba(255,231,194,.22)}
+
+/* ---------- feature ---------- */
+.feature{display:grid;gap:clamp(30px,5vw,68px);grid-template-columns:1fr;align-items:center}
+@media(min-width:880px){.feature{grid-template-columns:1.05fr .95fr}}
+
+/* ---------- intro: copy beside a photograph ---------- */
+.intro{display:grid;gap:clamp(32px,5vw,72px);grid-template-columns:1fr;align-items:center}
+@media(min-width:900px){.intro{grid-template-columns:1.02fr .98fr}}
+
+/* ---------- photo slot ----------
+   A real image goes in .photo__img. Until the shoot happens this
+   renders as a labelled frame so the space is designed, not empty. */
+.photo{position:relative;border-radius:26px;overflow:hidden;background:rgba(255,231,194,.09);
+  border:2.5px dashed rgba(255,214,153,.45);aspect-ratio:4/5;display:grid;place-items:center;text-align:center;
+  transition:transform .5s var(--spring),border-color .4s}
+.photo:hover{transform:translateY(-6px);border-color:var(--butter)}
+.slice--cream .photo{background:var(--milk);border-color:rgba(122,47,0,.28)}
+.photo__img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none}
+.photo.has-image .photo__img{display:block}
+.photo.has-image .photo__slot{display:none}
+.photo.has-image{border-style:solid;border-color:transparent}
+.photo__slot{padding:30px;display:grid;gap:12px;justify-items:center}
+.photo__slot svg{width:44px;height:44px;opacity:.5}
+.photo__label{font-family:var(--display);font-weight:700;font-size:1.5rem;letter-spacing:-.02em;line-height:1.1}
+.photo__note{font-size:.82rem;opacity:.62;max-width:26ch;line-height:1.6}
+@media(max-width:620px){.photo{aspect-ratio:4/3}}
+.feature ul{list-style:none;margin-top:24px;display:grid;gap:12px}
+.feature li{display:flex;gap:12px;align-items:flex-start;opacity:.9}
+.feature li::before{content:'';flex-shrink:0;width:9px;height:9px;border-radius:50%;background:var(--butter);margin-top:.55em}
+.feature li:nth-child(2)::before{background:var(--matcha-lt)}
+.feature li:nth-child(3)::before{background:var(--jam-lt)}
+.feature li:nth-child(4)::before{background:var(--cream)}
+
+/* ---------- find us ---------- */
+.find{display:grid;gap:clamp(28px,4vw,58px);grid-template-columns:1fr}
+@media(min-width:880px){.find{grid-template-columns:1fr 1fr}}
+.addr{font-family:var(--display);font-weight:700;font-size:clamp(2rem,4.2vw,3rem);line-height:1.08;letter-spacing:-.035em;margin-top:12px;color:var(--crust)}
+.hours{margin-top:32px;display:grid;gap:10px;max-width:400px}
+.hours__row{display:flex;justify-content:space-between;gap:20px;padding-bottom:9px;border-bottom:1px dashed rgba(122,47,0,.26)}
+.hours__row span:last-child{font-weight:700}
+.mapcard{background:var(--crust);border-radius:26px;padding:clamp(26px,3vw,38px);color:var(--cream);display:flex;flex-direction:column;justify-content:center;gap:8px;min-height:280px}
+.mapcard .btn--solid{background:var(--butter);color:var(--crust);box-shadow:0 4px 0 rgba(0,0,0,.24)}
+.mapcard .btn--solid:hover{box-shadow:0 9px 0 rgba(0,0,0,.24)}
+.mapcard__pin{width:54px;height:54px;margin-bottom:16px;animation:bob 2.6s var(--spring) infinite}
+@keyframes bob{0%,100%{translate:0 0}50%{translate:0 -9px}}
+
+/* ---------- footer ---------- */
+.foot{background:var(--char);color:var(--cream);padding:clamp(50px,7vw,80px) 0 32px}
+.foot__grid{display:grid;gap:34px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.foot__mark{height:58px;width:auto;margin-bottom:14px}
+.foot h5{font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;opacity:.55;margin-bottom:14px;font-weight:700}
+.foot a:hover{color:var(--butter)}
+.foot ul{list-style:none;display:grid;gap:9px;font-size:.95rem}
+.foot__bar{margin-top:46px;padding-top:22px;border-top:1px solid rgba(255,231,194,.16);display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;font-size:.84rem;opacity:.7}
+
+/* ---------- page headers ---------- */
+.pagehead{padding:clamp(130px,15vw,170px) 0 clamp(30px,4vw,44px);text-align:center}
+.pagehead h1{font-family:var(--display);font-weight:700;font-size:clamp(2.6rem,7vw,4.6rem);line-height:.98;letter-spacing:-.04em;color:var(--crust);margin-top:10px}
+.pagehead p{max-width:44ch;margin:14px auto 0;opacity:.82}
+
+/* ---------- toast ---------- */
+.toast{position:fixed;left:50%;bottom:28px;translate:-50% 140%;z-index:200;background:var(--char);color:var(--cream);padding:15px 24px;border-radius:999px;font-size:.92rem;font-weight:600;box-shadow:0 10px 30px rgba(0,0,0,.3);transition:translate .5s var(--spring),opacity .3s;max-width:calc(100vw - 32px);text-align:center;opacity:0;pointer-events:none}
+.toast.show{translate:-50% 0;opacity:1;pointer-events:auto}
+
+/* ---------- responsive ---------- */
+@media(max-width:900px){
+  .burger{display:block}
+  .nav__links{position:fixed;inset:64px 0 auto 0;flex-direction:column;gap:0;background:var(--cream);border-bottom:1px solid rgba(122,47,0,.14);padding:8px var(--pad) 22px;margin-left:0;align-items:stretch;clip-path:inset(0 0 100% 0);transition:clip-path .45s var(--ease)}
+  .nav__links.open{clip-path:inset(0 0 0 0)}
+  .nav__links a{padding:14px 0;border-bottom:1px solid rgba(122,47,0,.1);font-size:1.05rem}
+  .nav__links .btn{margin-top:16px;justify-content:center;border-bottom:0}
+  .hero__logo{width:80vw}
+  .mi{flex-wrap:wrap}
+  .mi__dots{display:none}
+  .mi__price{margin-left:auto}
+}
+
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  .rise{opacity:1;transform:none}
+  body.loading .hero__logo{opacity:1}
+}
+</style>
+</head>
+<body class="loading">
+
+<div id="curtain"></div>
+<button id="curtainSkip" aria-label="Skip intro">Skip</button>
+
+<nav class="nav">
+  <a href="#/" class="nav__mark" aria-label="Brioche, home">
+    <img src="assets/brioche-mark.svg" alt="Brioche">
+  </a>
+  <button class="burger" aria-expanded="false" aria-label="Menu" aria-controls="navlinks">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="nav__links" id="navlinks">
+    <a href="#/">Home</a>
+    <a href="#/menus">Menus</a>
+    <a href="#/matcha-and-coffee">Matcha &amp; coffee</a>
+    <a href="#/visit">Visit</a>
+    <a href="#" class="btn btn--solid" data-book style="padding:11px 22px;font-size:.9rem">Book a table</a>
+  </div>
+</nav>
+
+<div class="page" id="page">
+  <main id="app"></main>
+
+  <footer class="foot">
+    <div class="wrap">
+      <div class="foot__grid">
+        <div>
+          <img class="foot__mark" src="assets/brioche-mark.svg" alt="Brioche">
+          <p style="opacity:.75;font-size:.95rem;max-width:30ch">
+            A café and sober bar on Queensferry Street. French and Japanese inspired.
+          </p>
+        </div>
+        <div>
+          <h5>Visit</h5>
+          <ul>
+            <li>10B Queensferry Street</li>
+            <li>West End, Edinburgh</li>
+            <li><a href="tel:+447428066656">07428 066656</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5>Menus</h5>
+          <ul>
+            <li><a href="#/menus">Menus</a></li>
+            <li><a href="#/menus#afternoon-tea">Afternoon tea</a></li>
+            <li><a href="#/matcha-and-coffee">Matcha and coffee</a></li>
+            <li><a href="#/visit">Opening hours</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5>Book</h5>
+          <ul>
+            <li><a href="#" data-book>A table</a></li>
+            <li><a href="#" data-book>Afternoon tea</a></li>
+            <li><a href="#/visit">Larger groups</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="foot__bar">
+        <span>&copy; 2026 Brioche. Demo build, not live.</span>
+        <span>Designed and built by <a href="https://barkerdigital.co.uk" style="font-weight:700">Barker Digital</a></span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ============================================================
+   CONFIG — paste the Lightspeed booking URL here and every
+   Book button on the site goes live. Nothing else to change.
+   ============================================================ */
+const BOOKING_URL = "";
+
+/* All menu content below is transcribed from the two menu
+   artworks supplied by the client. Prices are written the way
+   the menus write them, without a pound sign. */
+
+const ALLERGENS = "1 Celery, 2 Cereals containing gluten, 3 Crustaceans, 4 Eggs, 5 Fish, 6 Lupin, 7 Milk, 8 Molluscs, 9 Mustard, 10 Peanuts, 11 Sesame seeds, 12 Soya, 13 Sulphur dioxide and sulphites, 14 Tree nuts";
+const SERVICE = "A discretionary service charge of 12.5% is added to the bill on dine in only. This is shared among staff.";
+const KEY = "V = Vegetarian. VG = Vegan.";
+
+const dome = `<div class="dome"><svg viewBox="0 0 1200 120" preserveAspectRatio="none" aria-hidden="true"><path fill="currentColor" d="M0,120 L0,66 C0,20 118,0 296,0 C462,0 574,38 596,74 C618,38 730,0 896,0 C1074,0 1200,20 1200,66 L1200,120 Z"/></svg></div>`;
+const domeMatcha = dome.replace('class="dome"','class="dome dome--matcha"');
+const cup = `<g fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="round"><path d="M22,34 h58 v34 a29,29 0 0 1 -58,0 Z"/><path d="M80,42 h10 a16,16 0 0 1 0,32 h-4"/><path d="M18,104 h74"/></g>`;
+
+const vg = ' <span class="tag">VG</span>';
+const v  = ' <span class="tag tag--v">V</span>';
+
+/* one menu row: name on the left, price on the right */
+const row = (name, price) =>
+  `<li class="mi"><span class="mi__name">${name}</span><span class="mi__dots"></span>${price ? `<span class="mi__price">${price}</span>` : ''}</li>`;
+
+const group = (title, note, items, flag) => `
+  <div class="menu-group rise">
+    <div class="menu-group__top">
+      <h2>${title}</h2>
+      ${flag ? `<div class="price-flag">${flag}</div>` : ''}
+      ${note ? `<p class="menu-group__note">${note}</p>` : ''}
+    </div>
+    <ul class="menu-list">${items.join('')}</ul>
+  </div>`;
+
+const allergenBlock = (codes) => `
+  <p class="allergen-key rise">
+    ${KEY}${codes ? ` Allergens in this section: ${codes}.` : ''}<br>
+    ${ALLERGENS}.<br>${SERVICE}
+  </p>`;
+
+/* ============================ HOME ============================ */
+const HOME = `
+<section class="slice slice--cream hero">
+  <svg class="drift drift--cupL" viewBox="0 0 120 120" aria-hidden="true">${cup}</svg>
+  <svg class="drift drift--cupR" viewBox="0 0 120 120" aria-hidden="true">${cup}</svg>
+
+  <div class="wrap">
+    <img class="hero__logo" id="heroLogo" src="assets/brioche-mark.svg" alt="Brioche" width="1588" height="1073">
+    <p class="hero__tag">A little French. A little Japanese.</p>
+    <p class="hero__addr">10B Queensferry Street, West End, Edinburgh</p>
+
+    <div class="btn-row">
+      <a href="#" class="btn btn--solid" data-book>Book a table</a>
+      <a href="#/menus" class="btn btn--ghost">See the menu</a>
+    </div>
+  </div>
+
+  <div class="hero__cue" aria-hidden="true">
+    <span>Scroll</span>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 4v15M5 13l7 7 7-7"/></svg>
+  </div>
+</section>
+
+${dome}
+
+<section class="slice slice--brown" style="padding-top:20px">
+  <div class="wrap">
+    <div class="intro">
+      <div>
+        <p class="eyebrow rise">What we are</p>
+        <h2 class="h-lg rise" style="--d:60ms;max-width:16ch;margin-top:10px">Something new for the West End.</h2>
+        <p class="lede rise" style="--d:120ms;max-width:50ch;margin-top:20px;opacity:.86">
+          This September, Brioche brings a new kind of café and bar to Edinburgh. Freshly roasted
+          single origin coffee, bold fusion food, and a bright and welcoming room built around a
+          hidden plant oasis.
+        </p>
+        <p class="rise" style="--d:170ms;max-width:50ch;margin-top:18px;opacity:.8">
+          The menu draws French and Japanese influences together in a way that is familiar but not
+          quite what you would expect. Teriyaki french toast. Duck a L&rsquo;orange dumplings. Two
+          very different ideas on one menu, with familiar flavours and a few unexpected turns.
+        </p>
+        <div class="btn-row rise" style="--d:210ms">
+          <a href="#/menus" class="btn btn--solid">See the menu</a>
+        </div>
+      </div>
+
+      <figure class="photo rise" style="--d:140ms" id="photoRoom">
+        <img class="photo__img" src="assets/room.jpg" alt="The room at Brioche">
+        <figcaption class="photo__slot">
+          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="5" y="10" width="38" height="30" rx="5"/>
+            <circle cx="17" cy="21" r="4"/>
+            <path d="M5 34l11-9 8 7 6-5 13 11"/>
+          </svg>
+          <span class="photo__label">Photo to be added</span>
+        </figcaption>
+      </figure>
+    </div>
+
+    <div class="beats">
+      <div class="beat rise" style="--d:0ms">
+        <div class="beat__when">The coffee</div>
+        <h3>Yunnan washed house blend</h3>
+        <p>We are passionate about East Asian specialty coffee and want to bring more of it to Edinburgh. Our house blend carries notes of jasmine, plum and red berry.</p>
+      </div>
+      <div class="beat rise" style="--d:100ms">
+        <div class="beat__when">The food</div>
+        <h3>French and Japanese</h3>
+        <p>Teriyaki french toast on brioche made with DOP Isigny Sainte-Mère butter. Duck dumplings finished with sancho pepper. Familiar flavours, arranged differently.</p>
+      </div>
+      <div class="beat rise" style="--d:200ms">
+        <div class="beat__when">The room</div>
+        <h3>A hidden plant oasis</h3>
+        <p>Bright, green and relaxed, with room to sit for as long as you like. A café through the day and a bar into the evening.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slice slice--cream">
+  <div class="wrap" style="text-align:center">
+    <p class="eyebrow rise">A first for the city</p>
+    <h2 class="h-lg rise" style="--d:60ms;max-width:18ch;margin:10px auto 0;color:var(--crust)">The first sober bar in Edinburgh.</h2>
+    <p class="lede rise" style="--d:120ms;max-width:52ch;margin:20px auto 0;opacity:.82">
+      We wanted to create somewhere that feels like a proper night out, without alcohol having to be
+      part of it. Somewhere to meet friends, try new food, go on a date, and enjoy a few drinks
+      without the hangover.
+    </p>
+    <p class="rise" style="--d:170ms;font-family:var(--display);font-weight:700;font-size:clamp(1.5rem,3.4vw,2.3rem);letter-spacing:-.03em;line-height:1.25;color:var(--crust);max-width:22ch;margin:34px auto 0">
+      East Asian coffee. French fusion menus. No hangover.
+    </p>
+    <div class="btn-row rise" style="--d:210ms;justify-content:center">
+      <a href="#/matcha-and-coffee" class="btn btn--ghost">See what we pour</a>
+    </div>
+  </div>
+</section>
+
+<div class="ribbon" aria-hidden="true">
+  <div class="ribbon__track">
+    <span>French toast</span><span>Sober bar</span><span>Dumplings</span><span>Plant oasis</span><span>Yunnan coffee</span>
+    <span>French toast</span><span>Sober bar</span><span>Dumplings</span><span>Plant oasis</span><span>Yunnan coffee</span>
+  </div>
+</div>
+
+<section class="slice slice--cream">
+  <div class="wrap">
+    <p class="eyebrow rise">Three ways in</p>
+    <h2 class="h-lg rise" style="--d:60ms;max-width:16ch;margin-top:10px;color:var(--crust)">A day at Brioche.</h2>
+    <p class="lede rise" style="--d:110ms;max-width:48ch;margin-top:18px;opacity:.8">
+      A café through the day and a bar into the evening. Whether you are here for a single plate or the whole afternoon, you are welcome to take your time.
+    </p>
+
+    <div class="day">
+      <div class="card rise" style="--d:0ms">
+        <span class="card__time tabular">ALL DAY</span>
+        <h3>The menu</h3>
+        <p>French toast four ways at 14.9. Classics from 9.5, including black truffle eggs benedict on brioche. Petit plates at 9.5, with duck dumplings and french onion soup.</p>
+        <a href="#/menus" class="btn btn--solid">See the menu</a>
+      </div>
+      <div class="card rise" style="--d:100ms">
+        <span class="card__time tabular">FROM 14:00</span>
+        <h3>Afternoon tea</h3>
+        <p>49 per person, or 52 with alcohol free sparkling chardonnay. Sixteen savoury canapés across two selections, a traditional scone and doughnut bon bons. Afternoon tea must be booked a day ahead.</p>
+        <a href="#/menus" class="btn btn--solid">What is on it</a>
+      </div>
+      <div class="card rise" style="--d:200ms">
+        <span class="card__time tabular">THE COUNTER</span>
+        <h3>Matcha and coffee</h3>
+        <p>Four ceremonial grade matcha lattes, seven teas, single origin Yunnan coffee and three smoothies pressed from fruit alone. No booking required.</p>
+        <a href="#/matcha-and-coffee" class="btn btn--ghost">See the drinks</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+${dome}
+
+<section class="slice slice--brown" style="padding-top:20px">
+  <div class="wrap feature">
+    <div>
+      <p class="eyebrow rise">The one to book</p>
+      <h2 class="h-lg rise" style="--d:60ms;margin-top:10px;max-width:16ch">Afternoon tea, in full.</h2>
+      <p class="lede rise" style="--d:120ms;margin-top:18px;opacity:.86">
+        Sixteen canapés rather than a plate of sandwiches. Crab and trout roe profiteroles, bresaola
+        with honey cheese, fig and brie on spiced bread. The vegetarian selection is prepared to the
+        same standard. A traditional scone with Isigny Sainte-Mère butter follows, then doughnut bon bons.
+      </p>
+      <ul class="rise" style="--d:180ms">
+        <li>49 per person, or 52 with alcohol free sparkling chardonnay</li>
+        <li>Nine canapés on the surf and turf selection</li>
+        <li>Seven on the vegetarian selection</li>
+        <li>Eight loose leaf teas, from French earl grey to Islay whisky</li>
+        <li>Afternoon tea must be booked a day ahead.</li>
+      </ul>
+      <div class="btn-row">
+        <a href="#" class="btn btn--solid" data-book>Book afternoon tea</a>
+        <a href="#/menus" class="btn btn--ghost">Read the menu</a>
+      </div>
+    </div>
+
+    <figure class="photo rise" style="--d:140ms" id="photoTea">
+      <img class="photo__img" src="assets/afternoon-tea.jpg" alt="Afternoon tea at Brioche">
+      <figcaption class="photo__slot">
+        <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="5" y="10" width="38" height="30" rx="5"/>
+          <circle cx="17" cy="21" r="4"/>
+          <path d="M5 34l11-9 8 7 6-5 13 11"/>
+        </svg>
+        <span class="photo__label">Photo to be added</span>
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="slice slice--cream">
+  <div class="wrap find">
+    <div>
+      <p class="eyebrow rise">Find us</p>
+      <p class="addr rise" style="--d:60ms">10B Queensferry Street,<br>West End, Edinburgh.</p>
+      <p class="rise" style="--d:120ms;margin-top:16px;opacity:.8;max-width:42ch">
+        A short walk from the west end of Princes Street, on the road towards Haymarket.
+        Look for the brown loaf above the door.
+      </p>
+      <div class="hours rise" style="--d:180ms">
+        <div class="hours__row"><span>Monday to Friday</span><span class="tabular">08:00 to 17:00</span></div>
+        <div class="hours__row"><span>Saturday</span><span class="tabular">08:30 to 17:30</span></div>
+        <div class="hours__row"><span>Sunday</span><span class="tabular">09:00 to 17:00</span></div>
+      </div>
+      <div class="btn-row">
+        <a href="https://maps.google.com/?q=10B+Queensferry+Street+Edinburgh" target="_blank" rel="noopener" class="btn btn--ghost">Open in maps</a>
+      </div>
+    </div>
+    <div class="mapcard rise" style="--d:100ms">
+      <div>
+        <svg class="mapcard__pin" viewBox="0 0 48 48" aria-hidden="true">
+          <path fill="#FFD699" d="M24 4c-8 0-14 6-14 13.6C10 28 24 44 24 44s14-16 14-26.4C38 10 32 4 24 4Z"/>
+          <circle cx="24" cy="17.5" r="5.4" fill="#7A2F00"/>
+        </svg>
+        <p class="h-md">Bookings are open.</p>
+      </div>
+      <p style="opacity:.82;margin-top:18px;font-size:.96rem">
+        Afternoon tea must be booked a day ahead.
+      </p>
+      <div class="btn-row" style="margin-top:18px">
+        <a href="#" class="btn btn--solid" data-book>Book a table</a>
+      </div>
+    </div>
+  </div>
+</section>
+`;
+
+/* ========================== ALL DAY ========================== */
+const MENUS = `
+<section class="slice slice--cream pagehead">
+  <div class="wrap">
+    <p class="eyebrow">Food</p>
+    <h1>Menus</h1>
+    <p>Served through the day, with afternoon tea from two o'clock. The kitchen runs from opening until close.</p>
+  </div>
+</section>
+
+${dome}
+
+<section class="slice slice--brown" style="padding-top:20px">
+  <div class="wrap wrap--narrow">
+    <p class="eyebrow rise" style="text-align:center">Served all day</p>
+
+    ${group('French toast', 'Brioche french toast with the finest DOP Isigny Sainte-Mère butter', [
+      row('Maple &amp; Cinnamon Butter' + v),
+      row('Strawberries &amp; Cream' + v),
+      row('Crispy Panko Chicken &amp; Hot Honey Butter'),
+      row('BBQ Teriyaki Pork with Umami Salt &amp; Pepper')
+    ], '14.9')}
+
+    ${group('Classics', 'Available all day', [
+      row('Avocado on Toast with Sancho Pepper' + vg, '9.5'),
+      row('Pistachio Crumb Acai Bowl' + vg, '12.9'),
+      row('Black Truffle Eggs Benedict on Brioche', '14.9')
+    ])}
+
+    ${group('Petit plates', 'Petit, or wee, or little', [
+      row("6 Duck a L&rsquo;orange Dumplings"),
+      row("6 Spinach a L&rsquo;orange Dumplings" + vg),
+      row('French Onion Soup with Wildfarmed Sourdough' + v)
+    ], '9.5')}
+
+    ${allergenBlock('french toast and classics 2, 4, 7, 9, 10, 11, 12, 14. Petit plates 1, 2, 3, 4, 9, 10, 11, 12, 13, 14')}
+  </div>
+</section>
+
+<section class="slice slice--cream" id="afternoon-tea">
+  <div class="wrap wrap--narrow">
+    <div class="tea-head rise">
+      <p class="eyebrow">From two o'clock</p>
+      <h2>Afternoon tea</h2>
+      <p class="tea-price">49 per person, or 52 with alcohol free sparkling chardonnay</p>
+      <p class="tea-book">Afternoon tea must be booked a day ahead.</p>
+    </div>
+
+    <div class="tea-grid">
+      <div class="tea-col rise">
+        <h3>Surf &amp; turf</h3>
+        <p class="tea-col__note">Nine canapés</p>
+        <ul>
+          <li>Blini with Cream Cheese, Smoked Salmon &amp; Lemon</li>
+          <li>Basil Cream Cheese &amp; Prawn on Spinach Bread</li>
+          <li>Horseradish Cream Cheese &amp; Crayfish on Lemon &amp; Basil Cake</li>
+          <li>Bresaola, Mustard &amp; Honey Cheese with Flaxseeds on Special Grain Bread</li>
+          <li>Semi-Dried Cherry Tomato, Goat's Cheese &amp; Pecan on Walnut Bread</li>
+          <li>Courgette, Cheese, Ham &amp; Red Pepper on Tomato Bread</li>
+          <li>Comté, Semi-Dried Apricot &amp; Almond Profiterole</li>
+          <li>Crab, Cucumber &amp; Trout Roe Profiterole</li>
+          <li>Fig, Brie &amp; Pea Semolina on Spiced Bread</li>
+        </ul>
+        <p class="tea-col__foot">Allergens 1, 2, 3, 4, 5, 7, 8, 9, 11, 12, 13, 14</p>
+        <p class="tea-or">or</p>
+      </div>
+
+      <div class="tea-col tea-col--veg rise" style="--d:80ms">
+        <h3>Vegetarian</h3>
+        <p class="tea-col__note">Seven canapés</p>
+        <ul>
+          <li>Polenta with Courgette &amp; Cherry Tomato</li>
+          <li>Horseradish Cream Cheese &amp; Paprika on Spinach Bread</li>
+          <li>Goat's Cheese, Almond &amp; Pistachio Choux Pastry</li>
+          <li>Aubergine, Ewe's Cheese &amp; Almond on Sandwich Bread with Fig &amp; Hazelnut</li>
+          <li>Fromage Frais, Piquillo Pepper &amp; Black Olive on Curry Sandwich Bread</li>
+          <li>Tomato &amp; Basil with Grilled Vegetables on Walnut Bread</li>
+          <li>Mini Brioche with Creamed Brie, Apple, Fig &amp; Hazelnut</li>
+        </ul>
+        <p class="tea-col__foot">Allergens 1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 14</p>
+      </div>
+
+      <div class="tea-col tea-col--sweet rise" style="--d:160ms">
+        <h3>Scone &amp; bon bons</h3>
+        <p class="tea-col__note">To finish</p>
+        <ul>
+          <li>Plain scone, Isigny Sainte-Mère butter &amp; strawberry preserve</li>
+          <li>Doughnut bon bons: apple, red fruit, pistachio</li>
+        </ul>
+        <p class="tea-col__foot">Allergens 2, 4, 7, 10, 12, 14</p>
+
+        <h3 style="margin-top:26px">Loose leaf tea</h3>
+        <p class="tea-col__note">Choose one</p>
+        <p class="tea-teas">Breakfast, Decaf, French Earl Grey, Apple &amp; Cinnamon, Yunnan Green, Peppermint, Chai, Islay Whisky</p>
+      </div>
+    </div>
+
+    ${allergenBlock('')}
+
+    <div class="btn-row rise" style="justify-content:center">
+      <a href="#" class="btn btn--solid" data-book>Book a table</a>
+      <a href="#/matcha-and-coffee" class="btn btn--ghost">Matcha and coffee</a>
+    </div>
+  </div>
+</section>
+`;
+
+/* ===================== MATCHA AND COFFEE ===================== */
+const DRINKS = `
+<section class="slice slice--cream pagehead">
+  <div class="wrap">
+    <p class="eyebrow">The counter</p>
+    <h1>Matcha &amp; coffee</h1>
+    <p>Open all day, no booking required. Our Yunnan washed house blend carries notes of jasmine, plum and red berry. Loose leaf tea from Edinburgh's Pekoe, and ceremonial grade matcha whisked to order.</p>
+  </div>
+</section>
+
+${domeMatcha}
+
+<section class="slice slice--matcha" style="padding-top:20px">
+  <div class="wrap wrap--narrow">
+    ${group('Matcha lattes', 'Ceremonial grade, single origin, all vegan. Alternative milks on request', [
+      row('French Vanilla', '4.9'),
+      row('Mango', '5.2'),
+      row('Strawberries &amp; Cream Cloud', '5.5'),
+      row('Isle of Skye Smoked Salted Maple', '5.9')
+    ])}
+
+    ${group('Coffee &amp; tea', "Yunnan washed house blend. Jasmine, plum and red berry. Tea from Edinburgh&rsquo;s Pekoe", [
+      row('Americano or Long Black', '3.5'),
+      row('Flat White, Cappuccino, Latte or Iced Latte', '4.2'),
+      row('Tea. Breakfast, Decaf, Earl Grey, Chamomile, Jade Tips, Peppermint, Berry', '3.9')
+    ])}
+
+    ${group('Pure smoothies', 'Pressed from fruit alone', [
+      row('Mango &amp; Passionfruit' + vg),
+      row('Strawberries &amp; Banana' + vg),
+      row('Super Acai' + vg)
+    ], '6.9')}
+
+    ${allergenBlock('')}
+
+    <div class="btn-row rise" style="justify-content:center">
+      <a href="#/menus" class="btn btn--solid">See the food menus</a>
+      <a href="#/visit" class="btn btn--ghost">Opening hours</a>
+    </div>
+  </div>
+</section>
+`;
+
+/* =========================== VISIT =========================== */
+const VISIT = `
+<section class="slice slice--cream pagehead">
+  <div class="wrap">
+    <p class="eyebrow">Where and when</p>
+    <h1>Visit</h1>
+    <p>You will find us on Queensferry Street in the West End, a short walk from the west end of Princes Street.</p>
+  </div>
+</section>
+
+<section class="slice slice--cream" style="padding-top:0">
+  <div class="wrap find">
+    <div>
+      <p class="addr rise" style="margin-top:0">10B Queensferry Street,<br>West End, Edinburgh.</p>
+      <div class="hours rise" style="--d:80ms">
+        <div class="hours__row"><span>Monday to Friday</span><span class="tabular">08:00 to 17:00</span></div>
+        <div class="hours__row"><span>Saturday</span><span class="tabular">08:30 to 17:30</span></div>
+        <div class="hours__row"><span>Sunday</span><span class="tabular">09:00 to 17:00</span></div>
+      </div>
+      <p class="rise" style="--d:140ms;margin-top:24px;opacity:.82;max-width:42ch">
+        Walk ins are welcome for the all day menu and the counter. Afternoon tea must be booked a day ahead.
+        For parties of six or more, please telephone us and we will arrange the table.
+      </p>
+      <div class="btn-row rise" style="--d:180ms">
+        <a href="https://maps.google.com/?q=10B+Queensferry+Street+Edinburgh" target="_blank" rel="noopener" class="btn btn--ghost">Open in maps</a>
+        <a href="tel:+447428066656" class="btn btn--ghost">07428 066656</a>
+      </div>
+    </div>
+    <div class="mapcard rise" style="--d:100ms">
+      <div>
+        <svg class="mapcard__pin" viewBox="0 0 48 48" aria-hidden="true">
+          <path fill="#FFD699" d="M24 4c-8 0-14 6-14 13.6C10 28 24 44 24 44s14-16 14-26.4C38 10 32 4 24 4Z"/>
+          <circle cx="24" cy="17.5" r="5.4" fill="#7A2F00"/>
+        </svg>
+        <p class="h-md">Book a table.</p>
+      </div>
+      <p style="opacity:.82;margin-top:18px;font-size:.96rem">
+        Select your service and a time that suits, and we will confirm your table.
+      </p>
+      <div class="btn-row" style="margin-top:18px">
+        <a href="#" class="btn btn--solid" data-book>Book a table</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+${dome}
+
+<section class="slice slice--brown" style="padding-top:20px">
+  <div class="wrap" style="text-align:center">
+    <h2 class="h-lg rise" style="max-width:20ch;margin:0 auto">Getting here.</h2>
+    <div class="beats" style="text-align:left">
+      <div class="beat rise" style="--d:0ms">
+        <div class="beat__when">On foot</div>
+        <h3>From Princes Street</h3>
+        <p>Head west past the Caledonian and continue straight on. Queensferry Street begins at the junction, and we are a short way down on the left.</p>
+      </div>
+      <div class="beat rise" style="--d:100ms">
+        <div class="beat__when">By train</div>
+        <h3>Haymarket or Waverley</h3>
+        <p>Haymarket is approximately ten minutes on foot. Waverley is fifteen.</p>
+      </div>
+      <div class="beat rise" style="--d:200ms">
+        <div class="beat__when">By bus</div>
+        <h3>West End stops</h3>
+        <p>A number of services stop at the West End on Shandwick Place, two minutes from the door.</p>
+      </div>
+    </div>
+  </div>
+</section>
+`;
+
+const notFound = `
+<section class="slice slice--cream pagehead" style="min-height:80svh">
+  <div class="wrap">
+    <p class="eyebrow">Sorry</p>
+    <h1>Page not found</h1>
+    <p>That page could not be found. Our menus are linked below.</p>
+    <div class="btn-row" style="justify-content:center">
+      <a href="#/" class="btn btn--solid">Back to the home page</a>
+      <a href="#/menus" class="btn btn--ghost">See the menus</a>
+    </div>
+  </div>
+</section>`;
+
+const ROUTES = {
+  '/': HOME,
+  '/menus': MENUS,
+  /* old links keep working */
+  '/all-day': MENUS,
+  '/afternoon-tea': MENUS,
+  '/matcha-and-coffee': DRINKS,
+  '/visit': VISIT
+};
+
+const TITLES = {
+  '/all-day': 'Menus — Brioche, Edinburgh',
+  '/afternoon-tea': 'Menus — Brioche, Edinburgh',
+  '/': 'Brioche — French and Japanese inspired, Queensferry Street, Edinburgh',
+  '/menus': 'Menus — Brioche, Edinburgh',
+  '/matcha-and-coffee': 'Matcha and coffee — Brioche, Edinburgh',
+  '/visit': 'Visit — Brioche, 10B Queensferry Street, Edinburgh'
+};
+
+const app = document.getElementById('app');
+let firstRender = true;
+
+function render(){
+  const path = location.hash.replace(/^#/,'') || '/';
+  app.innerHTML = ROUTES[path] || notFound;
+  document.title = TITLES[path] || 'Brioche — Edinburgh';
+  window.scrollTo(0,0);
+  document.querySelectorAll('.nav__links a[href^="#/"]').forEach(a=>{
+    if(a.getAttribute('href') === '#'+path) a.setAttribute('aria-current','page');
+    else a.removeAttribute('aria-current');
+  });
+  observe();
+  closeMenu();
+  if(firstRender){ firstRender = false; runIntro(); }
+}
+
+/* ---------- the intro: one element, one animation ---------- */
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+let introDone = false;
+let flight = null;
+
+function finishIntro(){
+  if(introDone) return;
+  introDone = true;
+  const hero = document.getElementById('heroLogo');
+  document.getElementById('curtain').classList.add('gone');
+  document.getElementById('curtainSkip').classList.add('gone');
+  document.body.classList.remove('loading');
+  if(hero){
+    hero.classList.remove('flying');
+    if(flight) flight.cancel();
+    hero.style.opacity = '';
+    hero.classList.add('settled');
+  }
+}
+
+function runIntro(){
+  const hero = document.getElementById('heroLogo');
+  if(reduced || !hero || !hero.animate){ finishIntro(); return; }
+
+  const skipBtn = document.getElementById('curtainSkip');
+  skipBtn.addEventListener('click', ()=> flight ? flight.finish() : finishIntro());
+  addEventListener('keydown', e=>{ if(e.key === 'Escape') flight ? flight.finish() : finishIntro(); });
+  const bail = setTimeout(finishIntro, 5000);
+
+  const start = () => {
+    if(introDone) return;
+    const b = hero.getBoundingClientRect();
+    if(!b.width){ finishIntro(); return; }
+
+    const ratio = b.width / b.height;
+    const bigW  = Math.min(innerWidth * 0.88, innerHeight * 0.80 * ratio);
+    const bigH  = bigW / ratio;
+    const s     = bigW / b.width;
+
+    const ox = b.left + b.width / 2, oy = b.top + b.height;
+    const dx = innerWidth / 2 - ox;
+    const dy = (innerHeight / 2 + bigH / 2) - oy;
+    const big = `translate(${dx}px, ${dy}px) scale(${s})`;
+
+    hero.classList.add('flying');
+    hero.style.transformOrigin = '50% 100%';
+
+    flight = hero.animate([
+      {transform:`translate(${dx}px, ${dy}px) scale(${s * 1.06}, ${s * 0.3})`, opacity:0, offset:0, easing:'cubic-bezier(.34,1.56,.64,1)'},
+      {transform:big, opacity:1, offset:0.17, easing:'linear'},
+      {transform:big, opacity:1, offset:0.44, easing:'cubic-bezier(.66,0,.2,1)'},
+      {transform:'none', opacity:1, offset:1}
+    ], {duration:1900, fill:'both'});
+
+    document.getElementById('curtain').animate(
+      [{opacity:1},{opacity:0}], {duration:560, delay:1120, easing:'ease-out', fill:'forwards'});
+
+    flight.finished.then(()=>{ clearTimeout(bail); finishIntro(); })
+                   .catch(()=>{ clearTimeout(bail); finishIntro(); });
+  };
+
+  if(hero.complete) requestAnimationFrame(start);
+  else hero.addEventListener('load', ()=>requestAnimationFrame(start), {once:true});
+}
+
+/* ---------- scroll reveals ---------- */
+let io;
+function observe(){
+  if(io) io.disconnect();
+  io = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, {threshold:.1, rootMargin:'0px 0px -6% 0px'});
+  document.querySelectorAll('.rise').forEach(el=>io.observe(el));
+}
+
+/* ---------- booking ---------- */
+let toastTimer;
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.classList.remove('show'), 4200);
+}
+document.addEventListener('click', e=>{
+  const b = e.target.closest('[data-book]');
+  if(!b) return;
+  e.preventDefault();
+  if(BOOKING_URL) window.open(BOOKING_URL,'_blank','noopener');
+  else toast('Booking link not connected yet. Lightspeed URL to be added.');
+});
+
+/* ---------- mobile menu ---------- */
+const burger = document.querySelector('.burger');
+const links = document.getElementById('navlinks');
+function closeMenu(){ links.classList.remove('open'); burger.setAttribute('aria-expanded','false'); }
+burger.addEventListener('click', ()=>{
+  const open = links.classList.toggle('open');
+  burger.setAttribute('aria-expanded', String(open));
+});
+links.addEventListener('click', e=>{ if(e.target.closest('a')) closeMenu(); });
+
+/* ---------- nav hides on scroll down ---------- */
+let lastY = 0;
+addEventListener('scroll', ()=>{
+  if(links.classList.contains('open')) return;
+  const nav = document.querySelector('.nav'), y = scrollY;
+  nav.style.transform = (y > lastY && y > 220) ? 'translateY(-102%)' : 'translateY(0)';
+  lastY = y;
+}, {passive:true});
+
+addEventListener('hashchange', render);
+render();
+</script>
+</body>
+</html>
