@@ -16,6 +16,45 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+<!-- ============================================================
+     CONFIG. Four values, all of them optional. The site works
+     with every one of them left blank, it just does less.
+
+       BOOKING_URL   the Lightspeed booking link. Every Book
+                     button on the site opens it.
+       PORTAL_API    the deployed portal, no trailing slash.
+                     The private hire form posts here.
+       POSTHOG_KEY   the PostHog project key. Leave blank and
+                     no analytics script loads at all.
+       POSTHOG_HOST  eu.i.posthog.com or us.i.posthog.com.
+                     It must match the region the project was
+                     created in.
+     ============================================================ -->
+<script>
+window.BRIOCHE = {
+  BOOKING_URL : "",
+  PORTAL_API  : "https://brioche-portal.vercel.app",
+  POSTHOG_KEY : "phc_vu3cSykAkzBsJKP296Tv5SLvVvb8yHKfsiCorQ5ouiRC",
+  POSTHOG_HOST: "https://us.i.posthog.com"
+};
+</script>
+
+<script>
+/* PostHog loader. Skipped entirely when no key is set, so the
+   demo build makes no third party requests. */
+(function(){
+  var c = window.BRIOCHE;
+  if(!c.POSTHOG_KEY) { window.track = function(){}; return; }
+  !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+  posthog.init(c.POSTHOG_KEY, {
+    api_host: c.POSTHOG_HOST,
+    person_profiles: 'identified_only',
+    capture_pageview: false      /* the router captures these, see below */
+  });
+  window.track = function(name, props){ try{ posthog.capture(name, props||{}); }catch(e){} };
+})();
+</script>
+
 <style>
 /* ============================================================
    BRIOCHE — demo build by Barker Digital
@@ -307,6 +346,49 @@ body.loading .hero{overflow:visible}
 .toast{position:fixed;left:50%;bottom:28px;translate:-50% 140%;z-index:200;background:var(--char);color:var(--cream);padding:15px 24px;border-radius:999px;font-size:.92rem;font-weight:600;box-shadow:0 10px 30px rgba(0,0,0,.3);transition:translate .5s var(--spring),opacity .3s;max-width:calc(100vw - 32px);text-align:center;opacity:0;pointer-events:none}
 .toast.show{translate:-50% 0;opacity:1;pointer-events:auto}
 
+/* ---------- private hire form ----------
+   Sits on cream. Fields are milk so they read as surfaces
+   rather than holes, matching .card. */
+.hire{max-width:760px;margin:0 auto}
+.hire__intro{text-align:center;max-width:52ch;margin:0 auto clamp(30px,4vw,44px)}
+.form{display:grid;gap:20px}
+.form__row{display:grid;gap:20px;grid-template-columns:1fr}
+@media(min-width:660px){.form__row--2{grid-template-columns:1fr 1fr}.form__row--3{grid-template-columns:1fr 1fr 1fr}}
+.field{display:grid;gap:7px}
+.field > label{font-size:.86rem;font-weight:700;color:var(--crust)}
+.field .hint{font-size:.79rem;opacity:.62;line-height:1.5}
+.field input,.field select,.field textarea{
+  font:inherit;font-weight:500;color:var(--char);background:var(--milk);
+  border:2px solid rgba(122,47,0,.18);border-radius:14px;padding:13px 15px;width:100%;
+  transition:border-color .2s,background .2s}
+.field textarea{resize:vertical;min-height:104px;line-height:1.6}
+.field select{appearance:none;cursor:pointer;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath fill='%237A2F00' d='M1 1.5 6 6.5l5-5'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 15px center;background-size:12px;padding-right:40px}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--crust);background:#FFFBF3}
+.field input::placeholder,.field textarea::placeholder{color:rgba(74,28,0,.38)}
+.field.bad input,.field.bad select,.field.bad textarea{border-color:#B0342F;background:#FFF4F2}
+.field__err{font-size:.79rem;font-weight:700;color:#B0342F;display:none}
+.field.bad .field__err{display:block}
+.check{display:flex;gap:12px;align-items:flex-start;font-size:.88rem;line-height:1.6}
+.check input{width:21px;height:21px;flex-shrink:0;margin-top:2px;accent-color:var(--crust);border-radius:6px}
+.form__foot{display:flex;flex-wrap:wrap;gap:16px;align-items:center;margin-top:6px}
+.form__note{font-size:.82rem;opacity:.66;line-height:1.6;max-width:38ch}
+.btn[disabled]{opacity:.55;pointer-events:none}
+.hire-kinds{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));margin-bottom:clamp(34px,4.5vw,52px)}
+.hire-kind{background:var(--milk);border-radius:20px;padding:24px;box-shadow:0 3px 0 rgba(122,47,0,.14)}
+.hire-kind h3{font-family:var(--display);font-weight:700;font-size:1.5rem;letter-spacing:-.03em;line-height:1;color:var(--crust);margin-bottom:8px}
+.hire-kind p{font-size:.92rem;opacity:.82;line-height:1.6}
+.hire-kinds > :nth-child(2){background:#FFF6E8}
+.hire-kinds > :nth-child(3){background:#FFF1DA}
+/* sent state */
+.sent{background:var(--milk);border-radius:26px;padding:clamp(32px,4.5vw,52px);text-align:center;box-shadow:0 3px 0 rgba(122,47,0,.18)}
+.sent__tick{width:64px;height:64px;margin:0 auto 18px;border-radius:50%;background:var(--crust);display:grid;place-items:center}
+.sent__tick svg{width:30px;stroke:var(--butter);stroke-width:3.4;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.sent h2{font-family:var(--display);font-weight:700;font-size:clamp(2rem,4.4vw,2.8rem);letter-spacing:-.035em;line-height:1;color:var(--crust)}
+.sent p{margin-top:14px;opacity:.85;max-width:46ch;margin-left:auto;margin-right:auto}
+.sent__ref{display:inline-block;margin-top:20px;font-weight:700;letter-spacing:.1em;background:var(--butter);color:var(--char);padding:9px 20px;border-radius:999px;font-size:.9rem}
+
 /* ---------- responsive ---------- */
 @media(max-width:900px){
   .burger{display:block}
@@ -345,6 +427,7 @@ body.loading .hero{overflow:visible}
     <a href="#/menus">Menus</a>
     <a href="#/matcha-and-coffee">Matcha &amp; coffee</a>
     <a href="#/visit">Visit</a>
+    <a href="#/private-hire">Private hire</a>
     <a href="#" class="btn btn--solid" data-book style="padding:11px 22px;font-size:.9rem">Book a table</a>
   </div>
 </nav>
@@ -383,7 +466,8 @@ body.loading .hero{overflow:visible}
           <ul>
             <li><a href="#" data-book>A table</a></li>
             <li><a href="#" data-book>Afternoon tea</a></li>
-            <li><a href="#/visit">Larger groups</a></li>
+            <li><a href="#/private-hire">Larger groups</a></li>
+            <li><a href="#/private-hire">Private hire</a></li>
           </ul>
         </div>
       </div>
@@ -398,11 +482,9 @@ body.loading .hero{overflow:visible}
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
-/* ============================================================
-   CONFIG — paste the Lightspeed booking URL here and every
-   Book button on the site goes live. Nothing else to change.
-   ============================================================ */
-const BOOKING_URL = "";
+/* Config is set in the head, see the CONFIG block there. */
+const BOOKING_URL = window.BRIOCHE.BOOKING_URL;
+const PORTAL_API  = window.BRIOCHE.PORTAL_API;
 
 /* All menu content below is transcribed from the two menu
    artworks supplied by the client. Prices are written the way
@@ -486,7 +568,7 @@ ${dome}
       </div>
 
       <figure class="photo rise" style="--d:140ms" id="photoRoom">
-        <img class="photo__img" src="assets/room.jpg" alt="The room at Brioche">
+        <img class="photo__img" src="assets/room.jpg" alt="The room at Brioche" onload="this.closest('.photo').classList.add('has-image')" onerror="this.remove()">
         <figcaption class="photo__slot">
           <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <rect x="5" y="10" width="38" height="30" rx="5"/>
@@ -600,7 +682,7 @@ ${dome}
     </div>
 
     <figure class="photo rise" style="--d:140ms" id="photoTea">
-      <img class="photo__img" src="assets/afternoon-tea.jpg" alt="Afternoon tea at Brioche">
+      <img class="photo__img" src="assets/afternoon-tea.jpg" alt="Afternoon tea at Brioche" onload="this.closest('.photo').classList.add('has-image')" onerror="this.remove()">
       <figcaption class="photo__slot">
         <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <rect x="5" y="10" width="38" height="30" rx="5"/>
@@ -822,9 +904,10 @@ const VISIT = `
       </div>
       <p class="rise" style="--d:140ms;margin-top:24px;opacity:.82;max-width:42ch">
         Walk ins are welcome for the all day menu and the counter. Afternoon tea must be booked a day ahead.
-        For parties of six or more, please telephone us and we will arrange the table.
+        For parties of eight or more, and for private hire, please use the enquiry form and we will arrange it with you.
       </p>
       <div class="btn-row rise" style="--d:180ms">
+        <a href="#/private-hire" class="btn btn--ghost">Private hire and larger bookings</a>
         <a href="https://maps.google.com/?q=10B+Queensferry+Street+Edinburgh" target="_blank" rel="noopener" class="btn btn--ghost">Open in maps</a>
         <a href="tel:+447428066656" class="btn btn--ghost">07428 066656</a>
       </div>
@@ -873,6 +956,162 @@ ${dome}
 </section>
 `;
 
+/* ======================= PRIVATE HIRE =======================
+   The one part of the site that does not go to Lightspeed.
+   Everything here becomes a request in the portal, which a
+   member of staff then confirms or declines by hand. */
+const PRIVATE_HIRE = `
+<section class="slice slice--cream pagehead">
+  <div class="wrap">
+    <p class="eyebrow">Larger bookings</p>
+    <h1>Private hire</h1>
+    <p>Parties of eight and above, a section of the room, or the whole of Brioche for the day.</p>
+  </div>
+</section>
+
+<section class="slice slice--cream" style="padding-top:0">
+  <div class="wrap hire">
+
+    <div class="hire-kinds rise">
+      <div class="hire-kind">
+        <h3>A larger table</h3>
+        <p>Eight guests and above, seated together on the all day menu or on afternoon tea. The rest of the room stays open as usual.</p>
+      </div>
+      <div class="hire-kind">
+        <h3>An area of the room</h3>
+        <p>A section of the café held for your party, with the counter and the remaining tables still trading. Suited to a gathering of roughly twelve to thirty.</p>
+      </div>
+      <div class="hire-kind">
+        <h3>The whole venue</h3>
+        <p>Brioche closed to the public and given over to you, with the bar and the kitchen at your disposal. Available for daytime and evening bookings.</p>
+      </div>
+    </div>
+
+    <div class="hire__intro rise" style="--d:60ms">
+      <h2 class="h-md">Tell us what you have in mind.</h2>
+      <p style="margin-top:10px;opacity:.85">
+        Send the details below and we will reply by email to confirm. Nothing is held
+        until you hear from us. For a table of fewer than eight, please use the
+        booking button and reserve in the usual way.
+      </p>
+    </div>
+
+    <div id="hireWrap" class="rise" style="--d:120ms">
+      <form class="form" id="hireForm" novalidate>
+
+        <div class="form__row form__row--2">
+          <div class="field" data-f="name">
+            <label for="f-name">Your name</label>
+            <input id="f-name" name="name" type="text" autocomplete="name" required>
+            <span class="field__err">Please give us a name for the booking.</span>
+          </div>
+          <div class="field" data-f="kind">
+            <label for="f-kind">What you are after</label>
+            <select id="f-kind" name="kind" required>
+              <option value="large_table">A larger table</option>
+              <option value="area">An area of the room</option>
+              <option value="whole_venue">The whole venue</option>
+            </select>
+            <span class="field__err">Please choose one.</span>
+          </div>
+        </div>
+
+        <div class="form__row form__row--2">
+          <div class="field" data-f="email">
+            <label for="f-email">Email</label>
+            <input id="f-email" name="email" type="email" autocomplete="email" required>
+            <span class="field__err">We need a working email to reply to.</span>
+          </div>
+          <div class="field" data-f="phone">
+            <label for="f-phone">Telephone</label>
+            <input id="f-phone" name="phone" type="tel" autocomplete="tel" required>
+            <span class="field__err">Please give us a number we can reach you on.</span>
+          </div>
+        </div>
+
+        <div class="form__row form__row--3">
+          <div class="field" data-f="event_date">
+            <label for="f-date">Date</label>
+            <input id="f-date" name="event_date" type="date" required>
+            <span class="field__err">Please choose a date in the future.</span>
+          </div>
+          <div class="field" data-f="start_time">
+            <label for="f-start">Arrival time</label>
+            <input id="f-start" name="start_time" type="time" required>
+            <span class="field__err">Please give us a time.</span>
+          </div>
+          <div class="field" data-f="guests">
+            <label for="f-guests">Number of guests</label>
+            <input id="f-guests" name="guests" type="number" min="8" max="200" step="1" required>
+            <span class="field__err">Eight guests or more, please.</span>
+            <span class="hint">Eight is the minimum for this form.</span>
+          </div>
+        </div>
+
+        <div class="field" data-f="occasion">
+          <label for="f-occasion">The occasion</label>
+          <input id="f-occasion" name="occasion" type="text" placeholder="A birthday, a christening, a work lunch, or nothing in particular">
+        </div>
+
+        <div class="field" data-f="dietary">
+          <label for="f-dietary">Dietary requirements and access needs</label>
+          <textarea id="f-dietary" name="dietary" placeholder="Allergies, vegetarian and vegan numbers, anything we should know about getting into the room."></textarea>
+          <span class="hint">The kitchen would rather know now than on the day.</span>
+        </div>
+
+        <div class="field" data-f="notes">
+          <label for="f-notes">Anything else</label>
+          <textarea id="f-notes" name="notes" placeholder="How long you would like the room for, whether you want the bar open, and anything else worth saying."></textarea>
+        </div>
+
+        <div class="field" data-f="consent">
+          <label class="check">
+            <input id="f-consent" type="checkbox" name="consent" required>
+            <span>I am happy for Brioche to hold these details in order to answer this enquiry, and to contact me about it.</span>
+          </label>
+          <span class="field__err">Please tick the box so that we may reply.</span>
+        </div>
+
+        <div class="form__foot">
+          <button type="submit" class="btn btn--solid" id="hireSend">Send the enquiry</button>
+          <p class="form__note">
+            We will reply by email. Your details are used for this booking only and are
+            not passed to anyone else.
+          </p>
+        </div>
+
+      </form>
+    </div>
+
+  </div>
+</section>
+
+${dome}
+
+<section class="slice slice--brown" style="padding-top:20px">
+  <div class="wrap" style="text-align:center">
+    <h2 class="h-lg rise" style="max-width:22ch;margin:0 auto">What we will want to know.</h2>
+    <div class="beats" style="text-align:left">
+      <div class="beat rise" style="--d:0ms">
+        <div class="beat__when">Numbers</div>
+        <h3>A rough count is fine</h3>
+        <p>We would rather have an approximate figure now and a confirmed one nearer the date than wait for certainty before starting.</p>
+      </div>
+      <div class="beat rise" style="--d:100ms">
+        <div class="beat__when">Food</div>
+        <h3>Menus for a group</h3>
+        <p>Large parties usually order from a shortened version of the all day menu, or take afternoon tea. We will send the options with our reply.</p>
+      </div>
+      <div class="beat rise" style="--d:200ms">
+        <div class="beat__when">The room</div>
+        <h3>Held, not booked</h3>
+        <p>An enquiry does not hold the room. Your booking is made when you have our email confirming it.</p>
+      </div>
+    </div>
+  </div>
+</section>
+`;
+
 const notFound = `
 <section class="slice slice--cream pagehead" style="min-height:80svh">
   <div class="wrap">
@@ -893,7 +1132,12 @@ const ROUTES = {
   '/all-day': MENUS,
   '/afternoon-tea': MENUS,
   '/matcha-and-coffee': DRINKS,
-  '/visit': VISIT
+  '/visit': VISIT,
+  '/private-hire': PRIVATE_HIRE,
+  /* likely guesses at the URL all land in the right place */
+  '/private': PRIVATE_HIRE,
+  '/groups': PRIVATE_HIRE,
+  '/events': PRIVATE_HIRE
 };
 
 const TITLES = {
@@ -902,7 +1146,11 @@ const TITLES = {
   '/': 'Brioche — French and Japanese inspired, Queensferry Street, Edinburgh',
   '/menus': 'Menus — Brioche, Edinburgh',
   '/matcha-and-coffee': 'Matcha and coffee — Brioche, Edinburgh',
-  '/visit': 'Visit — Brioche, 10B Queensferry Street, Edinburgh'
+  '/visit': 'Visit — Brioche, 10B Queensferry Street, Edinburgh',
+  '/private-hire': 'Private hire and larger bookings — Brioche, Edinburgh',
+  '/private': 'Private hire and larger bookings — Brioche, Edinburgh',
+  '/groups': 'Private hire and larger bookings — Brioche, Edinburgh',
+  '/events': 'Private hire and larger bookings — Brioche, Edinburgh'
 };
 
 const app = document.getElementById('app');
@@ -919,6 +1167,8 @@ function render(){
   });
   observe();
   closeMenu();
+  mountHireForm();
+  track('$pageview', {route: path});
   if(firstRender){ firstRender = false; runIntro(); }
 }
 
@@ -1010,9 +1260,115 @@ document.addEventListener('click', e=>{
   const b = e.target.closest('[data-book]');
   if(!b) return;
   e.preventDefault();
+  track('booking_click', {label: b.textContent.trim(), route: location.hash.replace(/^#/,'') || '/'});
   if(BOOKING_URL) window.open(BOOKING_URL,'_blank','noopener');
   else toast('Booking link not connected yet. Lightspeed URL to be added.');
 });
+
+/* ---------- private hire enquiry ----------
+   Posts to the portal. Everything is validated here for the
+   sake of the person filling it in, and again on the server,
+   because this check can be walked straight past. */
+function mountHireForm(){
+  const form = document.getElementById('hireForm');
+  if(!form) return;
+
+  const today = new Date(); today.setHours(0,0,0,0);
+  const dateEl = document.getElementById('f-date');
+  dateEl.min = today.toISOString().slice(0,10);
+
+  track('private_hire_viewed');
+  let started = false;
+  form.addEventListener('input', ()=>{
+    if(started) return;
+    started = true;
+    track('private_hire_started');
+  }, {once:false});
+
+  const bad = (key, on) => {
+    const f = form.querySelector('[data-f="'+key+'"]');
+    if(f) f.classList.toggle('bad', !!on);
+  };
+  form.addEventListener('input', e=>{
+    const f = e.target.closest('.field');
+    if(f) f.classList.remove('bad');
+  });
+
+  form.addEventListener('submit', async e=>{
+    e.preventDefault();
+
+    const v = {
+      name      : form.name.value.trim(),
+      email     : form.email.value.trim(),
+      phone     : form.phone.value.trim(),
+      kind      : form.kind.value,
+      event_date: form.event_date.value,
+      start_time: form.start_time.value,
+      guests    : parseInt(form.guests.value, 10),
+      occasion  : form.occasion.value.trim(),
+      dietary   : form.dietary.value.trim(),
+      notes     : form.notes.value.trim()
+    };
+
+    const errs = [];
+    if(!v.name) errs.push('name');
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.email)) errs.push('email');
+    if(v.phone.replace(/[^0-9]/g,'').length < 9) errs.push('phone');
+    if(!v.event_date || new Date(v.event_date) < today) errs.push('event_date');
+    if(!v.start_time) errs.push('start_time');
+    if(!(v.guests >= 8 && v.guests <= 200)) errs.push('guests');
+    if(!form.consent.checked) errs.push('consent');
+
+    ['name','email','phone','event_date','start_time','guests','consent','kind'].forEach(k=>bad(k, errs.includes(k)));
+
+    if(errs.length){
+      track('private_hire_invalid', {fields: errs});
+      const first = form.querySelector('.field.bad input, .field.bad select');
+      if(first) first.focus();
+      toast('Please check the highlighted fields.');
+      return;
+    }
+
+    if(!PORTAL_API){
+      toast('Enquiry form not connected yet. Portal URL to be added.');
+      return;
+    }
+
+    const btn = document.getElementById('hireSend');
+    const label = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = 'Sending';
+
+    try{
+      const res = await fetch(PORTAL_API + '/api/enquiry', {
+        method : 'POST',
+        headers: {'Content-Type':'application/json'},
+        body   : JSON.stringify(v)
+      });
+      const data = await res.json().catch(()=>({}));
+      if(!res.ok) throw new Error(data.error || 'That did not send');
+
+      track('private_hire_submitted', {kind: v.kind, guests: v.guests});
+      document.getElementById('hireWrap').innerHTML = `
+        <div class="sent">
+          <div class="sent__tick"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.6 9.2 18 20 6.4"/></svg></div>
+          <h2>Thank you, that is with us.</h2>
+          <p>
+            A confirmation has gone to ${v.email.replace(/[<>&]/g,'')}. We will read the details
+            and reply to you by email. Please remember that the room is not held until you have
+            that reply.
+          </p>
+          <span class="sent__ref">Reference ${(data.reference || '').replace(/[^A-Z0-9-]/gi,'')}</span>
+        </div>`;
+      window.scrollTo({top: document.querySelector('.sent').getBoundingClientRect().top + scrollY - 120, behavior:'smooth'});
+    }catch(err){
+      track('private_hire_failed', {message: String(err.message || err)});
+      toast('That did not send. Please telephone us on 07428 066656 and we will take the details.');
+      btn.disabled = false;
+      btn.textContent = label;
+    }
+  });
+}
 
 /* ---------- mobile menu ---------- */
 const burger = document.querySelector('.burger');

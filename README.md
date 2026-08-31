@@ -104,21 +104,44 @@ Written the way the menus write them, without a pound sign, so the site matches 
 
 ---
 
+## Private hire
+
+There is now a fifth page at `#/private-hire`, linked from the nav, the footer and the Visit page. It is the one part of the site that does not go to Lightspeed.
+
+Parties of eight and above, an area of the room, and whole venue hire go through a form there. The form posts to the portal, where a member of staff confirms or declines it by hand. Nothing books itself, which is what keeps this from clashing with the Lightspeed diary. Everything else, including afternoon tea at any party size, still goes to Lightspeed.
+
+`#/private`, `#/groups` and `#/events` all resolve to the same page, so a guessed URL lands somewhere sensible.
+
+The portal is a separate project. See its own README for the deployment.
+
+---
+
 ## Before this goes live
 
-**1. Booking link.** First line of the `<script>` block:
+**1. Config.** One block in the `<head>`, four values:
 
 ```js
-const BOOKING_URL = "";
+window.BRIOCHE = {
+  BOOKING_URL : "",   // the Lightspeed link, every Book button uses it
+  PORTAL_API  : "",   // the deployed portal, no trailing slash
+  POSTHOG_KEY : "",   // blank means no analytics script loads at all
+  POSTHOG_HOST: "https://eu.i.posthog.com"
+};
 ```
 
-Paste the Lightspeed URL there and every Book button on the site goes live. Nothing else to change. Until then the buttons show a toast saying the link is not connected.
+Every one of them is optional and the site works with all four blank. Without the booking URL the Book buttons show a toast. Without the portal URL the private hire form says it is not connected. Without the PostHog key no third party script loads.
+
+The PostHog host has to match the region the project was created in, EU or US. Mixing them fails with an unhelpful error.
+
+The portal also needs `PUBLIC_SITE_ORIGIN` set to this site's address, or the browser blocks the form.
 
 **2. Still to confirm:**
 
 - Opening hours. Currently 08:00 to 17:00 weekdays, 08:30 to 17:30 Saturday, 09:00 to 17:00 Sunday. These are assumed, not given.
 - The opening month. The site now says "opening this September" with no year attached, taken from the launch copy.
 - The afternoon tea booking rule. The site states "Afternoon tea must be booked a day ahead." in five places, worded identically each time. If that requirement changes, search for that sentence and it will find every instance.
+- The minimum party size for private hire. The form is set to eight, stated on the page and enforced on both the form and the server. Changing it means editing the copy on `#/private-hire`, the `min` on the guests field, the check in the submit handler, and the same check in `api/enquiry.js` and `schema.sql`.
+- Whether Lightspeed caps party size at its own end. If it does not, somebody will book fourteen through the widget and never see the private hire page.
 - Whether the Matcha Sando link should be named on the site. Right now it is not.
 
 **3. Real photography.** Two slots are waiting on the home page. See the photo slots section above.
@@ -201,3 +224,48 @@ Menu rows use a dashed rule between items rather than dot leaders, which hold up
 
 Barker Digital
 zach@barkerdigital.co.uk / barkerdigital.co.uk
+
+---
+
+## Configuration
+
+Everything the site needs is in one block at the top of `index.html`:
+
+```js
+window.BRIOCHE = {
+  BOOKING_URL : "",   // Lightspeed link, every Book button uses it
+  PORTAL_API  : "https://brioche-portal.vercel.app",
+  POSTHOG_KEY : "phc_vu3cSykAkzBsJKP296Tv5SLvVvb8yHKfsiCorQ5ouiRC",
+  POSTHOG_HOST: "https://us.i.posthog.com"
+};
+```
+
+**PORTAL_API** points at the private hire portal. The portal only accepts the
+form from origins listed in its own `PUBLIC_SITE_ORIGIN` variable, so if this
+site moves to a new address, that variable has to be updated too or the browser
+will block the request.
+
+**POSTHOG_KEY** is a write-only project key. It is meant to be public and is
+safe in this file and in git. The account is on **US** cloud, not EU. Pointing
+EU keys at a US host, or the reverse, fails with an unhelpful error.
+
+**BOOKING_URL** is still empty. Until it is filled in, every Book button shows
+"Booking link not connected yet" rather than failing silently.
+
+## Photographs
+
+Two photographs are not yet supplied:
+
+```
+assets/room.jpg
+assets/afternoon-tea.jpg
+```
+
+The page handles their absence on its own. When a file is missing the image
+removes itself and the "Photo to be added" placeholder shows instead. Drop the
+files in with those exact names and they appear, no code change needed.
+
+## Deploying
+
+Static, so there is no build step. Push to the connected repository and Vercel
+publishes it. Nothing in this folder holds a secret.
