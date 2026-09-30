@@ -14,6 +14,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://mylightspeed.app">
 <link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <!-- ============================================================
@@ -21,7 +22,9 @@
      with every one of them left blank, it just does less.
 
        BOOKING_URL   the Lightspeed booking link. Every Book
-                     button on the site opens it.
+                     button on the site opens it inside the
+                     booking panel, live, without leaving the
+                     site. #/book links straight to it.
        PORTAL_API    the deployed portal, no trailing slash.
                      The private hire form posts here.
        POSTHOG_KEY   the PostHog project key. Leave blank and
@@ -32,7 +35,7 @@
      ============================================================ -->
 <script>
 window.BRIOCHE = {
-  BOOKING_URL : "",
+  BOOKING_URL : "https://mylightspeed.app/reservation/db1f6f59-5914-4b53-9462-14591bee4da7/reservation",
   PORTAL_API  : "https://brioche-portal.vercel.app",
   POSTHOG_KEY : "phc_vu3cSykAkzBsJKP296Tv5SLvVvb8yHKfsiCorQ5ouiRC",
   POSTHOG_HOST: "https://us.i.posthog.com"
@@ -389,6 +392,54 @@ body.loading .hero{overflow:visible}
 .sent p{margin-top:14px;opacity:.85;max-width:46ch;margin-left:auto;margin-right:auto}
 .sent__ref{display:inline-block;margin-top:20px;font-weight:700;letter-spacing:.1em;background:var(--butter);color:var(--char);padding:9px 20px;border-radius:999px;font-size:.9rem}
 
+/* ---------- booking panel ----------
+   The live Lightspeed page, framed inside the site. Centred
+   panel on desktop, full screen sheet on phones. */
+html.booking-open,html.booking-open body{overflow:hidden}
+.bk{position:fixed;inset:0;z-index:900;display:flex;align-items:center;justify-content:center;padding:24px;visibility:hidden;pointer-events:none}
+.bk.open{visibility:visible;pointer-events:auto}
+.bk__scrim{position:absolute;inset:0;background:rgba(74,28,0,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);opacity:0;transition:opacity .35s var(--ease)}
+.bk.open .bk__scrim{opacity:1}
+.bk__panel{
+  position:relative;display:flex;flex-direction:column;
+  width:min(760px,100%);height:min(920px,calc(100vh - 48px));height:min(920px,calc(100dvh - 48px));
+  background:var(--milk);border-radius:28px;overflow:hidden;
+  box-shadow:0 6px 0 rgba(74,28,0,.35),0 30px 80px rgba(74,28,0,.35);
+  transform:translateY(40px) scale(.97);opacity:0;
+  transition:transform .5s var(--spring),opacity .25s var(--ease)}
+.bk.open .bk__panel{transform:none;opacity:1}
+.bk__head{flex:0 0 auto;display:flex;align-items:center;gap:14px;padding:14px 16px 14px 24px;background:var(--crust);color:var(--butter)}
+.bk__title{font-family:var(--display);font-weight:700;font-size:clamp(1.6rem,3vw,2rem);line-height:1;letter-spacing:-.03em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bk__tab{margin-left:auto;font-size:.82rem;font-weight:700;white-space:nowrap;opacity:.85;padding:8px 4px;display:inline-flex;align-items:center;gap:6px}
+.bk__tab:hover{opacity:1;text-decoration:underline;text-underline-offset:3px}
+.bk__tab svg{width:13px;height:13px}
+.bk__x{flex:0 0 auto;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:var(--butter);color:var(--crust);transition:transform .3s var(--spring)}
+.bk__x:hover{transform:rotate(90deg) scale(1.06)}
+.bk__x svg{width:16px;height:16px}
+.bk__body{position:relative;flex:1 1 auto;min-height:0;background:#fff}
+.bk__frame{position:absolute;inset:0;width:100%;height:100%;border:0;display:block;background:#fff;opacity:0;transition:opacity .4s var(--ease)}
+.bk.ready .bk__frame{opacity:1}
+.bk__wait{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;text-align:center;padding:24px;background:var(--milk);color:var(--crust);transition:opacity .3s var(--ease)}
+.bk.ready .bk__wait{opacity:0;pointer-events:none}
+.bk__wait img{width:120px;animation:float 2.4s ease-in-out infinite}
+.bk__wait p{font-weight:700;font-size:.95rem}
+.bk__slow{font-size:.88rem;opacity:0;transition:opacity .3s}
+.bk__slow a{text-decoration:underline;text-underline-offset:3px}
+.bk.slow .bk__slow{opacity:.85}
+.bk__foot{flex:0 0 auto;padding:11px 20px;font-size:.84rem;font-weight:600;text-align:center;color:var(--char);background:var(--cream);border-top:1px solid rgba(122,47,0,.14);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bk__foot a{color:var(--crust);font-weight:700;text-decoration:underline;text-underline-offset:3px}
+
+@media(max-width:640px){
+  .bk{padding:0;align-items:stretch}
+  .bk__panel{width:100%;height:100vh;height:100dvh;border-radius:0;box-shadow:none;transform:translateY(100%);opacity:1;transition:transform .45s var(--ease)}
+  .bk__head{padding:10px 10px 10px 18px;padding-top:calc(10px + env(safe-area-inset-top))}
+  .bk__title{font-size:1.55rem}
+  .bk__tab span{display:none}
+  .bk__tab{padding:10px}
+  .bk__tab svg{width:18px;height:18px}
+  .bk__foot{padding-bottom:calc(11px + env(safe-area-inset-bottom));font-size:.8rem}
+}
+
 /* ---------- responsive ---------- */
 @media(max-width:900px){
   .burger{display:block}
@@ -480,6 +531,34 @@ body.loading .hero{overflow:visible}
 </div>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- Booking panel. The Lightspeed page loads into the frame the
+     first time someone presses Book, not before, so the rest of
+     the site stays light. -->
+<div class="bk" id="bk" role="dialog" aria-modal="true" aria-labelledby="bkTitle" aria-hidden="true">
+  <div class="bk__scrim" data-bk-close></div>
+  <div class="bk__panel">
+    <div class="bk__head">
+      <h2 class="bk__title" id="bkTitle">Book a table</h2>
+      <a class="bk__tab" id="bkTab" href="#" target="_blank" rel="noopener" aria-label="Open the booking page in a new tab">
+        <span>Open in a new tab</span>
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 2h5v5M14 2 7 9M12 10v4H2V4h4"/></svg>
+      </a>
+      <button class="bk__x" data-bk-close aria-label="Close booking">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M3 3l10 10M13 3 3 13"/></svg>
+      </button>
+    </div>
+    <div class="bk__body">
+      <div class="bk__wait">
+        <img src="assets/brioche-mark.svg" alt="">
+        <p>Opening the diary</p>
+        <p class="bk__slow">Taking a while? <a id="bkSlow" href="#" target="_blank" rel="noopener">Open the booking page directly</a>.</p>
+      </div>
+      <iframe class="bk__frame" id="bkFrame" title="Book a table at Brioche" allow="payment *" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+    </div>
+    <p class="bk__foot">Eight or more? <a href="#/private-hire" data-bk-close>Send a private hire enquiry</a></p>
+  </div>
+</div>
 
 <script>
 /* Config is set in the head, see the CONFIG block there. */
@@ -1134,6 +1213,10 @@ const ROUTES = {
   '/matcha-and-coffee': DRINKS,
   '/visit': VISIT,
   '/private-hire': PRIVATE_HIRE,
+  /* #/book opens the booking panel over the home page */
+  '/book': HOME,
+  '/booking': HOME,
+  '/reserve': HOME,
   /* likely guesses at the URL all land in the right place */
   '/private': PRIVATE_HIRE,
   '/groups': PRIVATE_HIRE,
@@ -1148,6 +1231,9 @@ const TITLES = {
   '/matcha-and-coffee': 'Matcha and coffee — Brioche, Edinburgh',
   '/visit': 'Visit — Brioche, 10B Queensferry Street, Edinburgh',
   '/private-hire': 'Private hire and larger bookings — Brioche, Edinburgh',
+  '/book': 'Book a table | Brioche, Edinburgh',
+  '/booking': 'Book a table | Brioche, Edinburgh',
+  '/reserve': 'Book a table | Brioche, Edinburgh',
   '/private': 'Private hire and larger bookings — Brioche, Edinburgh',
   '/groups': 'Private hire and larger bookings — Brioche, Edinburgh',
   '/events': 'Private hire and larger bookings — Brioche, Edinburgh'
@@ -1169,8 +1255,15 @@ function render(){
   closeMenu();
   mountHireForm();
   track('$pageview', {route: path});
+  const wantsBooking = ['/book','/booking','/reserve'].includes(path);
+  if(!wantsBooking) closeBooking();
   if(firstRender){ firstRender = false; runIntro(); }
+  if(wantsBooking){
+    if(introDone) openBooking();
+    else afterIntro = openBooking;
+  }
 }
+let afterIntro = null;
 
 /* ---------- the intro: one element, one animation ---------- */
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1190,6 +1283,7 @@ function finishIntro(){
     hero.style.opacity = '';
     hero.classList.add('settled');
   }
+  if(afterIntro){ const fn = afterIntro; afterIntro = null; fn(); }
 }
 
 function runIntro(){
@@ -1256,13 +1350,74 @@ function toast(msg){
   clearTimeout(toastTimer);
   toastTimer = setTimeout(()=>t.classList.remove('show'), 4200);
 }
+const bk      = document.getElementById('bk');
+const bkFrame = document.getElementById('bkFrame');
+const bkTitle = document.getElementById('bkTitle');
+let bkLoaded = false, bkSlowTimer, bkReturnFocus = null;
+
+document.getElementById('bkTab').href  = BOOKING_URL || '#';
+document.getElementById('bkSlow').href = BOOKING_URL || '#';
+
+bkFrame.addEventListener('load', ()=>{
+  if(!bkFrame.src) return;
+  clearTimeout(bkSlowTimer);
+  bk.classList.add('ready');
+  bk.classList.remove('slow');
+  track('booking_frame_loaded');
+});
+
+function openBooking(label){
+  if(!BOOKING_URL){ toast('Booking link not connected yet. Lightspeed URL to be added.'); return; }
+  bkTitle.textContent = /afternoon tea/i.test(label || '') ? 'Book afternoon tea' : 'Book a table';
+  if(!bkLoaded){
+    bkLoaded = true;
+    bkFrame.src = BOOKING_URL;
+    bkSlowTimer = setTimeout(()=>bk.classList.add('slow'), 8000);
+  }
+  bkReturnFocus = document.activeElement;
+  closeMenu();
+  bk.classList.add('open');
+  bk.setAttribute('aria-hidden','false');
+  document.documentElement.classList.add('booking-open');
+  setTimeout(()=>bk.querySelector('.bk__x').focus({preventScroll:true}), 60);
+  track('booking_opened', {label: label || '', route: location.hash.replace(/^#/,'') || '/'});
+}
+
+function closeBooking(){
+  if(!bk.classList.contains('open')) return;
+  bk.classList.remove('open');
+  bk.setAttribute('aria-hidden','true');
+  document.documentElement.classList.remove('booking-open');
+  if(location.hash === '#/book') history.replaceState(null, '', '#/');
+  if(bkReturnFocus && bkReturnFocus.focus) bkReturnFocus.focus({preventScroll:true});
+  track('booking_closed');
+}
+
 document.addEventListener('click', e=>{
+  if(e.target.closest('[data-bk-close]')){
+    const a = e.target.closest('a[href^="#/"]');
+    if(!a) e.preventDefault();
+    closeBooking();
+    return;
+  }
   const b = e.target.closest('[data-book]');
   if(!b) return;
   e.preventDefault();
   track('booking_click', {label: b.textContent.trim(), route: location.hash.replace(/^#/,'') || '/'});
-  if(BOOKING_URL) window.open(BOOKING_URL,'_blank','noopener');
-  else toast('Booking link not connected yet. Lightspeed URL to be added.');
+  openBooking(b.textContent.trim());
+});
+
+addEventListener('keydown', e=>{
+  if(!bk.classList.contains('open')) return;
+  if(e.key === 'Escape'){ e.preventDefault(); closeBooking(); return; }
+  /* keep Tab inside the panel */
+  if(e.key === 'Tab'){
+    const f = [...bk.querySelectorAll('a[href],button,iframe')].filter(el=>el.offsetParent !== null);
+    if(!f.length) return;
+    const first = f[0], last = f[f.length-1];
+    if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+    else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+  }
 });
 
 /* ---------- private hire enquiry ----------

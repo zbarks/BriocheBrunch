@@ -233,7 +233,7 @@ Everything the site needs is in one block at the top of `index.html`:
 
 ```js
 window.BRIOCHE = {
-  BOOKING_URL : "",   // Lightspeed link, every Book button uses it
+  BOOKING_URL : "https://mylightspeed.app/reservation/db1f6f59-5914-4b53-9462-14591bee4da7/reservation",
   PORTAL_API  : "https://brioche-portal.vercel.app",
   POSTHOG_KEY : "phc_vu3cSykAkzBsJKP296Tv5SLvVvb8yHKfsiCorQ5ouiRC",
   POSTHOG_HOST: "https://us.i.posthog.com"
@@ -249,8 +249,26 @@ will block the request.
 safe in this file and in git. The account is on **US** cloud, not EU. Pointing
 EU keys at a US host, or the reverse, fails with an unhelpful error.
 
-**BOOKING_URL** is still empty. Until it is filled in, every Book button shows
-"Booking link not connected yet" rather than failing silently.
+**BOOKING_URL** is set to the live Lightspeed reservation page. Every Book
+button opens it inside the site, in a booking panel, rather than sending people
+to another tab. On desktop it is a large centred panel over the page, on phones
+it goes full screen. Close with the cross, the backdrop or Escape.
+
+- The Lightspeed page only loads the first time someone presses Book, so it
+  adds nothing to the initial page load.
+- `#/book` (also `#/booking`, `#/reserve`) opens the panel directly. Use this
+  link on Instagram, Google Business Profile and anywhere else that needs a
+  straight booking link.
+- The panel header has an "Open in a new tab" link, and if Lightspeed is slow
+  to load a direct link appears after eight seconds, so there is always a way
+  through.
+- The panel footer points parties of eight or more at the private hire page.
+- If Lightspeed ever starts refusing to be framed, the panel will show their
+  error. Blank BOOKING_URL is not the fix; switch the click handler back to
+  `window.open(BOOKING_URL)` in the booking section of the script.
+
+If BOOKING_URL is emptied, every Book button shows "Booking link not connected
+yet" rather than failing silently.
 
 ## Photographs
 
