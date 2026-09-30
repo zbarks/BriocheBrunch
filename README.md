@@ -270,6 +270,30 @@ it goes full screen. Close with the cross, the backdrop or Escape.
 If BOOKING_URL is emptied, every Book button shows "Booking link not connected
 yet" rather than failing silently.
 
+## Coming soon switch
+
+The site can show a single holding page instead of everything else. It is one
+line at the top of the config block in `index.html`:
+
+```js
+COMING_SOON : true,    // holding page on
+COMING_SOON : false,   // full site live
+```
+
+Change it, push, and Vercel republishes. Nothing else needs touching, and no
+code is removed while it is on.
+
+- The holding page shows the logo (with the load animation), "Opening soon.",
+  a short line on the café, a Book a table button that opens the live
+  Lightspeed panel, a call button, and the address.
+- The nav and footer are hidden while it is on.
+- Every address on the site, including `#/menus` and `#/book`, lands on the
+  holding page. `#/book` still opens the booking panel over it.
+- To check the full site while the switch is on, add `?preview` to the
+  address, for example `https://yoursite.co.uk/?preview` or
+  `https://yoursite.co.uk/?preview#/menus`. Visitors without it see the
+  holding page.
+
 ## Photographs
 
 Two photographs are not yet supplied:

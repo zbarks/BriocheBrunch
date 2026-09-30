@@ -35,6 +35,13 @@
      ============================================================ -->
 <script>
 window.BRIOCHE = {
+  /* COMING SOON SWITCH
+     true  = visitors only see the holding page
+     false = the full site goes live
+     Add ?preview to the address to see the full site while
+     the switch is on, e.g. brioche.co.uk/?preview */
+  COMING_SOON : true,
+
   BOOKING_URL : "https://mylightspeed.app/reservation/db1f6f59-5914-4b53-9462-14591bee4da7/reservation",
   PORTAL_API  : "https://brioche-portal.vercel.app",
   POSTHOG_KEY : "phc_vu3cSykAkzBsJKP296Tv5SLvVvb8yHKfsiCorQ5ouiRC",
@@ -440,6 +447,24 @@ html.booking-open,html.booking-open body{overflow:hidden}
   .bk__foot{padding-bottom:calc(11px + env(safe-area-inset-bottom));font-size:.8rem}
 }
 
+/* ---------- coming soon ----------
+   Shown instead of the site while COMING_SOON is true. The nav
+   and footer are hidden, nothing else on the site is touched. */
+body.soon .nav,body.soon .foot{display:none}
+.soon-page{min-height:100svh;padding:48px 0 40px;text-align:center;display:flex;flex-direction:column}
+.soon-page .wrap{flex:1 0 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%}
+.soon-page .hero__logo{width:min(64vw, calc(44svh * var(--logo-ratio)))}
+.soon__eyebrow{margin-top:clamp(22px,3vw,34px);color:var(--crust)}
+.soon__head{color:var(--crust);margin-top:10px;white-space:nowrap}
+.soon__text{max-width:44ch;margin:16px auto 0;opacity:.85}
+.soon-page .btn-row{justify-content:center;margin-top:28px}
+.soon__foot{flex:0 0 auto;margin-top:36px;font-size:.84rem;font-weight:600;opacity:.62;line-height:1.8}
+.soon__foot a{text-decoration:underline;text-underline-offset:3px}
+@media(max-width:620px){
+  .soon-page .hero__logo{width:78vw}
+  .soon__head{font-size:clamp(1.9rem,10vw,2.6rem)}
+}
+
 /* ---------- responsive ---------- */
 @media(max-width:900px){
   .burger{display:block}
@@ -599,6 +624,30 @@ const allergenBlock = (codes) => `
     ${KEY}${codes ? ` Allergens in this section: ${codes}.` : ''}<br>
     ${ALLERGENS}.<br>${SERVICE}
   </p>`;
+
+/* ======================== COMING SOON ========================
+   The holding page. Only used while COMING_SOON is true. It
+   reuses the hero logo, so the load animation still plays. */
+const COMING_SOON = `
+<section class="slice slice--cream soon-page">
+  <div class="wrap">
+    <img class="hero__logo" id="heroLogo" src="assets/brioche-mark.svg" alt="Brioche" width="1588" height="1073">
+    <p class="eyebrow soon__eyebrow">Queensferry Street, Edinburgh</p>
+    <h1 class="h-lg soon__head">Opening soon.</h1>
+    <p class="lede soon__text">
+      A café and sober bar in the West End, French and Japanese inspired.
+      The doors open shortly, and the full website will follow with them.
+    </p>
+    <div class="btn-row">
+      ${BOOKING_URL ? '<a href="#" class="btn btn--solid" data-book>Book a table</a>' : ''}
+      <a href="tel:+447428066656" class="btn btn--ghost">Call 07428 066656</a>
+    </div>
+  </div>
+  <p class="soon__foot">
+    10B Queensferry Street, West End, Edinburgh<br>
+    Website by <a href="https://barkerdigital.co.uk">Barker Digital</a>
+  </p>
+</section>`;
 
 /* ============================ HOME ============================ */
 const HOME = `
@@ -1242,10 +1291,20 @@ const TITLES = {
 const app = document.getElementById('app');
 let firstRender = true;
 
+/* Coming soon is on unless the switch is off, or the address
+   carries ?preview so the full site can still be checked. */
+const SOON = !!window.BRIOCHE.COMING_SOON && !/[?&]preview\b/.test(location.search);
+document.body.classList.toggle('soon', SOON);
+
 function render(){
   const path = location.hash.replace(/^#/,'') || '/';
-  app.innerHTML = ROUTES[path] || notFound;
-  document.title = TITLES[path] || 'Brioche — Edinburgh';
+  if(SOON){
+    app.innerHTML = COMING_SOON;
+    document.title = 'Brioche | Opening soon on Queensferry Street, Edinburgh';
+  }else{
+    app.innerHTML = ROUTES[path] || notFound;
+    document.title = TITLES[path] || 'Brioche — Edinburgh';
+  }
   window.scrollTo(0,0);
   document.querySelectorAll('.nav__links a[href^="#/"]').forEach(a=>{
     if(a.getAttribute('href') === '#'+path) a.setAttribute('aria-current','page');
