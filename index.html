@@ -1008,15 +1008,7 @@ const PRIVATE_HIRE = `
 
         <div class="field" data-f="notes">
           <label for="f-notes">Anything else</label>
-          <textarea id="f-notes" name="notes" placeholder="How long you would like the room for, whether you want the bar open, and anything else worth saying."></textarea>
-        </div>
-
-        <div class="field" data-f="consent">
-          <label class="check">
-            <input id="f-consent" type="checkbox" name="consent" required>
-            <span>I am happy for Brioche to hold these details in order to answer this enquiry, and to contact me about it.</span>
-          </label>
-          <span class="field__err">Please tick the box so that we may reply.</span>
+          <textarea id="f-notes" name="notes" placeholder="How long you would like the room for, whether you would like catering or music, and anything else worth saying."></textarea>
         </div>
 
         <div class="form__foot">
@@ -1341,9 +1333,8 @@ function mountHireForm(){
     if(!v.event_date || new Date(v.event_date) < today) errs.push('event_date');
     if(!v.start_time) errs.push('start_time');
     if(!(v.guests >= 8 && v.guests <= 50)) errs.push('guests');
-    if(!form.consent.checked) errs.push('consent');
 
-    ['name','email','phone','event_date','start_time','guests','consent','kind'].forEach(k=>bad(k, errs.includes(k)));
+    ['name','email','phone','event_date','start_time','guests','kind'].forEach(k=>bad(k, errs.includes(k)));
 
     if(errs.length){
       track('private_hire_invalid', {fields: errs});
