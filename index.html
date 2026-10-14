@@ -381,6 +381,31 @@ body.loading .hero{overflow:visible}
 .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--crust);background:#FFFBF3}
 .field input::placeholder,.field textarea::placeholder{color:rgba(74,28,0,.38)}
 .field.bad input,.field.bad select,.field.bad textarea{border-color:#B0342F;background:#FFF4F2}
+/* custom dropdown, replaces the system select list */
+.sel{position:relative}
+.sel select{position:absolute;inset:0;opacity:0;pointer-events:none;height:100%}
+.sel__btn{font:inherit;font-weight:500;color:var(--char);background:var(--milk);text-align:left;cursor:pointer;
+  border:2px solid rgba(122,47,0,.18);border-radius:14px;padding:13px 44px 13px 15px;width:100%;position:relative;
+  transition:border-color .2s,background .2s}
+.sel__btn::after{content:'';position:absolute;right:16px;top:50%;width:11px;height:7px;margin-top:-3.5px;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath fill='none' stroke='%237A2F00' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' d='M1 1.5 6 6.5l5-5'/%3E%3C/svg%3E") center/contain no-repeat;
+  transition:transform .3s var(--spring)}
+.sel.open .sel__btn::after{transform:rotate(180deg)}
+.sel__btn:hover{border-color:rgba(122,47,0,.4)}
+.sel__btn:focus-visible,.sel.open .sel__btn{outline:none;border-color:var(--crust);background:#FFFBF3}
+.sel__list{position:absolute;left:0;right:0;top:calc(100% + 8px);z-index:30;list-style:none;margin:0;padding:8px;
+  background:var(--milk);border:2px solid var(--crust);border-radius:18px;box-shadow:0 14px 34px rgba(74,28,0,.22);
+  opacity:0;transform:translateY(-8px) scale(.98);transform-origin:top;pointer-events:none;
+  transition:opacity .2s var(--ease),transform .35s var(--spring)}
+.sel.open .sel__list{opacity:1;transform:none;pointer-events:auto}
+.sel__opt{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;border-radius:11px;
+  font-weight:600;color:var(--char);cursor:pointer;transition:background .15s,color .15s}
+.sel__opt[data-active="true"]{background:var(--cream)}
+.sel__opt[aria-selected="true"]{color:var(--crust)}
+.sel__opt[aria-selected="true"]::after{content:'';flex-shrink:0;width:16px;height:16px;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='%237A2F00' stroke-width='3' stroke-linecap='round' stroke-linejoin='round' d='M4 12.6 9.2 18 20 6.4'/%3E%3C/svg%3E") center/contain no-repeat}
+.field.bad .sel__btn{border-color:#B0342F;background:#FFF4F2}
+@media(prefers-reduced-motion:reduce){.sel__list,.sel__btn::after{transition:none}}
 .field__err{font-size:.79rem;font-weight:700;color:#B0342F;display:none}
 .field.bad .field__err{display:block}
 .check{display:flex;gap:12px;align-items:flex-start;font-size:.88rem;line-height:1.6}
@@ -1308,6 +1333,85 @@ function mountHireForm(){
   form.addEventListener('input', e=>{
     const f = e.target.closest('.field');
     if(f) f.classList.remove('bad');
+  });
+
+  /* custom dropdowns: the real select stays in the form, hidden, so the value still submits */
+  form.querySelectorAll('select').forEach(sel=>{
+    const wrap = document.createElement('div');
+    wrap.className = 'sel';
+    sel.parentNode.insertBefore(wrap, sel);
+    wrap.appendChild(sel);
+    sel.tabIndex = -1;
+    sel.setAttribute('aria-hidden','true');
+
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'sel__btn';
+    btn.id = sel.id + '-btn';
+    btn.setAttribute('aria-haspopup','listbox');
+    btn.setAttribute('aria-expanded','false');
+    const list = document.createElement('ul');
+    list.className = 'sel__list';
+    list.setAttribute('role','listbox');
+    list.id = sel.id + '-list';
+    btn.setAttribute('aria-controls', list.id);
+    const label = form.querySelector('label[for="'+sel.id+'"]');
+    if(label){ label.setAttribute('for', btn.id); list.setAttribute('aria-labelledby', label.id || (label.id = sel.id+'-label')); }
+
+    const opts = [...sel.options].map((o,i)=>{
+      const li = document.createElement('li');
+      li.className = 'sel__opt';
+      li.setAttribute('role','option');
+      li.id = sel.id + '-opt' + i;
+      li.textContent = o.textContent;
+      li.dataset.value = o.value;
+      list.appendChild(li);
+      return li;
+    });
+    wrap.append(btn, list);
+
+    let active = sel.selectedIndex;
+    const paint = ()=>{
+      btn.textContent = sel.options[sel.selectedIndex].textContent;
+      opts.forEach((li,i)=>{
+        li.setAttribute('aria-selected', i === sel.selectedIndex ? 'true' : 'false');
+        li.dataset.active = i === active ? 'true' : 'false';
+      });
+      btn.setAttribute('aria-activedescendant', opts[active].id);
+    };
+    const open  = ()=>{ active = sel.selectedIndex; paint(); wrap.classList.add('open'); btn.setAttribute('aria-expanded','true'); };
+    const close = ()=>{ wrap.classList.remove('open'); btn.setAttribute('aria-expanded','false'); };
+    const pick  = i =>{
+      sel.selectedIndex = i;
+      sel.dispatchEvent(new Event('input',{bubbles:true}));
+      sel.dispatchEvent(new Event('change',{bubbles:true}));
+      active = i; paint(); close(); btn.focus();
+    };
+
+    btn.addEventListener('click', ()=> wrap.classList.contains('open') ? close() : open());
+    opts.forEach((li,i)=>{
+      li.addEventListener('mousemove', ()=>{ active = i; paint(); });
+      li.addEventListener('click', ()=> pick(i));
+    });
+    btn.addEventListener('keydown', e=>{
+      const isOpen = wrap.classList.contains('open');
+      if(e.key === 'Escape' && isOpen){ e.preventDefault(); e.stopPropagation(); close(); return; }
+      if(['ArrowDown','ArrowUp','Home','End'].includes(e.key)){
+        e.preventDefault();
+        if(!isOpen){ open(); return; }
+        if(e.key === 'ArrowDown') active = Math.min(active+1, opts.length-1);
+        if(e.key === 'ArrowUp')   active = Math.max(active-1, 0);
+        if(e.key === 'Home') active = 0;
+        if(e.key === 'End')  active = opts.length-1;
+        paint();
+      }else if((e.key === 'Enter' || e.key === ' ') && isOpen){
+        e.preventDefault(); pick(active);
+      }else if(e.key === 'Tab' && isOpen){
+        close();
+      }
+    });
+    document.addEventListener('click', e=>{ if(!wrap.isConnected || !wrap.contains(e.target)) close(); });
+    paint();
   });
 
   form.addEventListener('submit', async e=>{
