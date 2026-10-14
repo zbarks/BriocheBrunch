@@ -311,3 +311,13 @@ files in with those exact names and they appear, no code change needed.
 
 Static, so there is no build step. Push to the connected repository and Vercel
 publishes it. Nothing in this folder holds a secret.
+
+## October 2026 update
+
+Brioche is trading coffee, matcha, pastry and retail only for the next six months, with the rear events space open for private events (seats up to fifty, catering, non alcoholic drinks only, sound system, in-house DJ and band).
+
+- The coming soon page is off (`COMING_SOON : false`).
+- Food menus, afternoon tea and table booking are removed. `#/menus`, `#/afternoon-tea` and `#/book` now resolve to the drinks and events pages.
+- `BOOKING_URL` is blank and no Book buttons remain. The booking panel code is dormant, not deleted.
+- Private hire is now the Events space page. The form still posts to the portal and still requires at least eight guests, now capped at fifty.
+- Five interior images are in `assets/` (`room`, `shopfront`, `cafe`, `atrium`, `events-space`), cropped of their white borders.

@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Brioche — French and Japanese inspired, Queensferry Street, Edinburgh</title>
-<meta name="description" content="Brioche. A café and sober bar in Edinburgh's West End. French and Japanese fusion, East Asian specialty coffee, afternoon tea. Opening this September at 10B Queensferry Street.">
+<title>Brioche | Coffee, matcha and pastry, Queensferry Street, Edinburgh</title>
+<meta name="description" content="Brioche. East Asian specialty coffee, ceremonial grade matcha and pastry at 10B Queensferry Street, Edinburgh. Private events in the rear space, seating up to fifty.">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="alternate icon" href="assets/favicon.png" type="image/png">
-<meta property="og:title" content="Brioche — Queensferry Street, Edinburgh">
-<meta property="og:description" content="A café and sober bar in Edinburgh's West End. French and Japanese fusion, East Asian specialty coffee.">
+<meta property="og:title" content="Brioche | Queensferry Street, Edinburgh">
+<meta property="og:description" content="East Asian specialty coffee, matcha and pastry in Edinburgh's West End. Private events space for up to fifty.">
 <meta property="og:image" content="assets/og-image.png">
 <meta property="og:type" content="website">
 
@@ -40,9 +40,9 @@ window.BRIOCHE = {
      false = the full site goes live
      Add ?preview to the address to see the full site while
      the switch is on, e.g. brioche.co.uk/?preview */
-  COMING_SOON : true,
+  COMING_SOON : false,
 
-  BOOKING_URL : "https://mylightspeed.app/reservation/db1f6f59-5914-4b53-9462-14591bee4da7/reservation",
+  BOOKING_URL : "",   /* table booking is switched off for now */
   PORTAL_API  : "https://brioche-portal.vercel.app",
   POSTHOG_KEY : "phc_vu3cSykAkzBsJKP296Tv5SLvVvb8yHKfsiCorQ5ouiRC",
   POSTHOG_HOST: "https://us.i.posthog.com"
@@ -318,6 +318,9 @@ body.loading .hero{overflow:visible}
 .photo__label{font-family:var(--display);font-weight:700;font-size:1.5rem;letter-spacing:-.02em;line-height:1.1}
 .photo__note{font-size:.82rem;opacity:.62;max-width:26ch;line-height:1.6}
 @media(max-width:620px){.photo{aspect-ratio:4/3}}
+.photo--wide{aspect-ratio:4/3}
+.gallery{display:grid;gap:16px;grid-template-columns:1fr;margin-top:clamp(28px,4vw,46px)}
+@media(min-width:760px){.gallery{grid-template-columns:repeat(3,1fr)}}
 .feature ul{list-style:none;margin-top:24px;display:grid;gap:12px}
 .feature li{display:flex;gap:12px;align-items:flex-start;opacity:.9}
 .feature li::before{content:'';flex-shrink:0;width:9px;height:9px;border-radius:50%;background:var(--butter);margin-top:.55em}
@@ -500,11 +503,10 @@ body.soon .nav,body.soon .foot{display:none}
   </button>
   <div class="nav__links" id="navlinks">
     <a href="#/">Home</a>
-    <a href="#/menus">Menus</a>
     <a href="#/matcha-and-coffee">Matcha &amp; coffee</a>
+    <a href="#/private-hire">Events space</a>
     <a href="#/visit">Visit</a>
-    <a href="#/private-hire">Private hire</a>
-    <a href="#" class="btn btn--solid" data-book style="padding:11px 22px;font-size:.9rem">Book a table</a>
+    <a href="#/private-hire" class="btn btn--solid" style="padding:11px 22px;font-size:.9rem">Enquire</a>
   </div>
 </nav>
 
@@ -517,7 +519,7 @@ body.soon .nav,body.soon .foot{display:none}
         <div>
           <img class="foot__mark" src="assets/brioche-mark.svg" alt="Brioche">
           <p style="opacity:.75;font-size:.95rem;max-width:30ch">
-            A café and sober bar on Queensferry Street. French and Japanese inspired.
+            A café on Queensferry Street. Coffee, matcha and pastry.
           </p>
         </div>
         <div>
@@ -529,26 +531,23 @@ body.soon .nav,body.soon .foot{display:none}
           </ul>
         </div>
         <div>
-          <h5>Menus</h5>
+          <h5>Explore</h5>
           <ul>
-            <li><a href="#/menus">Menus</a></li>
-            <li><a href="#/menus#afternoon-tea">Afternoon tea</a></li>
             <li><a href="#/matcha-and-coffee">Matcha and coffee</a></li>
+            <li><a href="#/private-hire">Events space</a></li>
             <li><a href="#/visit">Opening hours</a></li>
           </ul>
         </div>
         <div>
-          <h5>Book</h5>
+          <h5>Enquire</h5>
           <ul>
-            <li><a href="#" data-book>A table</a></li>
-            <li><a href="#" data-book>Afternoon tea</a></li>
-            <li><a href="#/private-hire">Larger groups</a></li>
-            <li><a href="#/private-hire">Private hire</a></li>
+            <li><a href="#/private-hire">Private events</a></li>
+            <li><a href="tel:+447428066656">Call us</a></li>
           </ul>
         </div>
       </div>
       <div class="foot__bar">
-        <span>&copy; 2026 Brioche. Demo build, not live.</span>
+        <span>&copy; 2026 Brioche.</span>
         <span>Designed and built by <a href="https://barkerdigital.co.uk" style="font-weight:700">Barker Digital</a></span>
       </div>
     </div>
@@ -635,11 +634,10 @@ const COMING_SOON = `
     <p class="eyebrow soon__eyebrow">Queensferry Street, Edinburgh</p>
     <h1 class="h-lg soon__head">Opening soon.</h1>
     <p class="lede soon__text">
-      A café and sober bar in the West End, French and Japanese inspired.
-      The doors open shortly, and the full website will follow with them.
+      A café on Queensferry Street, serving coffee, matcha and pastry.
     </p>
     <div class="btn-row">
-      ${BOOKING_URL ? '<a href="#" class="btn btn--solid" data-book>Book a table</a>' : ''}
+      <a href="#/private-hire" class="btn btn--solid">Events space</a>
       <a href="tel:+447428066656" class="btn btn--ghost">Call 07428 066656</a>
     </div>
   </div>
@@ -657,12 +655,12 @@ const HOME = `
 
   <div class="wrap">
     <img class="hero__logo" id="heroLogo" src="assets/brioche-mark.svg" alt="Brioche" width="1588" height="1073">
-    <p class="hero__tag">A little French. A little Japanese.</p>
+    <p class="hero__tag">Coffee, matcha and pastry.</p>
     <p class="hero__addr">10B Queensferry Street, West End, Edinburgh</p>
 
     <div class="btn-row">
-      <a href="#" class="btn btn--solid" data-book>Book a table</a>
-      <a href="#/menus" class="btn btn--ghost">See the menu</a>
+      <a href="#/matcha-and-coffee" class="btn btn--solid">See the drinks</a>
+      <a href="#/private-hire" class="btn btn--ghost">Events space</a>
     </div>
   </div>
 
@@ -679,33 +677,21 @@ ${dome}
     <div class="intro">
       <div>
         <p class="eyebrow rise">What we are</p>
-        <h2 class="h-lg rise" style="--d:60ms;max-width:16ch;margin-top:10px">Something new for the West End.</h2>
+        <h2 class="h-lg rise" style="--d:60ms;max-width:16ch;margin-top:10px">A café for the West End.</h2>
         <p class="lede rise" style="--d:120ms;max-width:50ch;margin-top:20px;opacity:.86">
-          This September, Brioche brings a new kind of café and bar to Edinburgh. Freshly roasted
-          single origin coffee, bold fusion food, and a bright and welcoming room built around a
-          hidden plant oasis.
+          Brioche serves East Asian specialty coffee, ceremonial grade matcha and pastry, with a
+          retail range alongside, in a tall and bright room on Queensferry Street.
         </p>
         <p class="rise" style="--d:170ms;max-width:50ch;margin-top:18px;opacity:.8">
-          The menu draws French and Japanese influences together in a way that is familiar but not
-          quite what you would expect. Teriyaki french toast. Duck a L&rsquo;orange dumplings. Two
-          very different ideas on one menu, with familiar flavours and a few unexpected turns.
+          The front of the room is given over to the counter. The rear, under a glazed roof, is
+          available for private events and seats up to fifty.
         </p>
         <div class="btn-row rise" style="--d:210ms">
-          <a href="#/menus" class="btn btn--solid">See the menu</a>
+          <a href="#/matcha-and-coffee" class="btn btn--solid">See the drinks</a>
         </div>
       </div>
 
-      <figure class="photo rise" style="--d:140ms" id="photoRoom">
-        <img class="photo__img" src="assets/room.jpg" alt="The room at Brioche" onload="this.closest('.photo').classList.add('has-image')" onerror="this.remove()">
-        <figcaption class="photo__slot">
-          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="5" y="10" width="38" height="30" rx="5"/>
-            <circle cx="17" cy="21" r="4"/>
-            <path d="M5 34l11-9 8 7 6-5 13 11"/>
-          </svg>
-          <span class="photo__label">Photo to be added</span>
-        </figcaption>
-      </figure>
+      <figure class="photo photo--wide has-image rise" style="--d:140ms"><img class="photo__img" src="assets/room.jpg" alt="The counter and seating at Brioche" loading="lazy"></figure>
     </div>
 
     <div class="beats">
@@ -715,71 +701,27 @@ ${dome}
         <p>We are passionate about East Asian specialty coffee and want to bring more of it to Edinburgh. Our house blend carries notes of jasmine, plum and red berry.</p>
       </div>
       <div class="beat rise" style="--d:100ms">
-        <div class="beat__when">The food</div>
-        <h3>French and Japanese</h3>
-        <p>Teriyaki french toast on brioche made with DOP Isigny Sainte-Mère butter. Duck dumplings finished with sancho pepper. Familiar flavours, arranged differently.</p>
+        <div class="beat__when">The matcha</div>
+        <h3>Ceremonial grade</h3>
+        <p>Single origin matcha, whisked to order and served as a latte in four flavours. Every one of them is vegan.</p>
       </div>
       <div class="beat rise" style="--d:200ms">
         <div class="beat__when">The room</div>
-        <h3>A hidden plant oasis</h3>
-        <p>Bright, green and relaxed, with room to sit for as long as you like. A café through the day and a bar into the evening.</p>
+        <h3>High ceilings, original plasterwork</h3>
+        <p>Warm light, plants and wood throughout, with space to sit for as long as you like.</p>
       </div>
     </div>
   </div>
 </section>
-
-<section class="slice slice--cream">
-  <div class="wrap" style="text-align:center">
-    <p class="eyebrow rise">A first for the city</p>
-    <h2 class="h-lg rise" style="--d:60ms;max-width:18ch;margin:10px auto 0;color:var(--crust)">The first sober bar in Edinburgh.</h2>
-    <p class="lede rise" style="--d:120ms;max-width:52ch;margin:20px auto 0;opacity:.82">
-      We wanted to create somewhere that feels like a proper night out, without alcohol having to be
-      part of it. Somewhere to meet friends, try new food, go on a date, and enjoy a few drinks
-      without the hangover.
-    </p>
-    <p class="rise" style="--d:170ms;font-family:var(--display);font-weight:700;font-size:clamp(1.5rem,3.4vw,2.3rem);letter-spacing:-.03em;line-height:1.25;color:var(--crust);max-width:22ch;margin:34px auto 0">
-      East Asian coffee. French fusion menus. No hangover.
-    </p>
-    <div class="btn-row rise" style="--d:210ms;justify-content:center">
-      <a href="#/matcha-and-coffee" class="btn btn--ghost">See what we pour</a>
-    </div>
-  </div>
-</section>
-
-<div class="ribbon" aria-hidden="true">
-  <div class="ribbon__track">
-    <span>French toast</span><span>Sober bar</span><span>Dumplings</span><span>Plant oasis</span><span>Yunnan coffee</span>
-    <span>French toast</span><span>Sober bar</span><span>Dumplings</span><span>Plant oasis</span><span>Yunnan coffee</span>
-  </div>
-</div>
 
 <section class="slice slice--cream">
   <div class="wrap">
-    <p class="eyebrow rise">Three ways in</p>
-    <h2 class="h-lg rise" style="--d:60ms;max-width:16ch;margin-top:10px;color:var(--crust)">A day at Brioche.</h2>
-    <p class="lede rise" style="--d:110ms;max-width:48ch;margin-top:18px;opacity:.8">
-      A café through the day and a bar into the evening. Whether you are here for a single plate or the whole afternoon, you are welcome to take your time.
-    </p>
-
-    <div class="day">
-      <div class="card rise" style="--d:0ms">
-        <span class="card__time tabular">ALL DAY</span>
-        <h3>The menu</h3>
-        <p>French toast four ways at 14.9. Classics from 9.5, including black truffle eggs benedict on brioche. Petit plates at 9.5, with duck dumplings and french onion soup.</p>
-        <a href="#/menus" class="btn btn--solid">See the menu</a>
-      </div>
-      <div class="card rise" style="--d:100ms">
-        <span class="card__time tabular">FROM 14:00</span>
-        <h3>Afternoon tea</h3>
-        <p>49 per person, or 52 with alcohol free sparkling chardonnay. Sixteen savoury canapés across two selections, a traditional scone and doughnut bon bons. Afternoon tea must be booked a day ahead.</p>
-        <a href="#/menus" class="btn btn--solid">What is on it</a>
-      </div>
-      <div class="card rise" style="--d:200ms">
-        <span class="card__time tabular">THE COUNTER</span>
-        <h3>Matcha and coffee</h3>
-        <p>Four ceremonial grade matcha lattes, seven teas, single origin Yunnan coffee and three smoothies pressed from fruit alone. No booking required.</p>
-        <a href="#/matcha-and-coffee" class="btn btn--ghost">See the drinks</a>
-      </div>
+    <p class="eyebrow rise">The room</p>
+    <h2 class="h-lg rise" style="--d:60ms;max-width:16ch;margin-top:10px;color:var(--crust)">Come and sit down.</h2>
+    <div class="gallery">
+      <figure class="photo photo--wide has-image rise"><img class="photo__img" src="assets/shopfront.jpg" alt="The front of the café, looking towards the counter" loading="lazy"></figure>
+      <figure class="photo photo--wide has-image rise"><img class="photo__img" src="assets/cafe.jpg" alt="The curved tiled counter and seating" loading="lazy"></figure>
+      <figure class="photo photo--wide has-image rise"><img class="photo__img" src="assets/atrium.jpg" alt="Seating beneath the glazed roof" loading="lazy"></figure>
     </div>
   </div>
 </section>
@@ -789,37 +731,24 @@ ${dome}
 <section class="slice slice--brown" style="padding-top:20px">
   <div class="wrap feature">
     <div>
-      <p class="eyebrow rise">The one to book</p>
-      <h2 class="h-lg rise" style="--d:60ms;margin-top:10px;max-width:16ch">Afternoon tea, in full.</h2>
+      <p class="eyebrow rise">Private events</p>
+      <h2 class="h-lg rise" style="--d:60ms;margin-top:10px;max-width:16ch">The rear events space.</h2>
       <p class="lede rise" style="--d:120ms;margin-top:18px;opacity:.86">
-        Sixteen canapés rather than a plate of sandwiches. Crab and trout roe profiteroles, bresaola
-        with honey cheese, fig and brie on spiced bread. The vegetarian selection is prepared to the
-        same standard. A traditional scone with Isigny Sainte-Mère butter follows, then doughnut bon bons.
+        For the next six months the rear of Brioche is open for private events. It is a tall room
+        under a glazed roof, with its own sound system, and it can be arranged to suit the evening you have in mind.
       </p>
       <ul class="rise" style="--d:180ms">
-        <li>49 per person, or 52 with alcohol free sparkling chardonnay</li>
-        <li>Nine canapés on the surf and turf selection</li>
-        <li>Seven on the vegetarian selection</li>
-        <li>Eight loose leaf teas, from French earl grey to Islay whisky</li>
-        <li>Afternoon tea must be booked a day ahead.</li>
+        <li>Seats up to fifty guests</li>
+        <li>Catering available</li>
+        <li>Non alcoholic drinks only</li>
+        <li>Sound system, with an in-house DJ and band available</li>
       </ul>
       <div class="btn-row">
-        <a href="#" class="btn btn--solid" data-book>Book afternoon tea</a>
-        <a href="#/menus" class="btn btn--ghost">Read the menu</a>
+        <a href="#/private-hire" class="btn btn--solid">Make an enquiry</a>
       </div>
     </div>
 
-    <figure class="photo rise" style="--d:140ms" id="photoTea">
-      <img class="photo__img" src="assets/afternoon-tea.jpg" alt="Afternoon tea at Brioche" onload="this.closest('.photo').classList.add('has-image')" onerror="this.remove()">
-      <figcaption class="photo__slot">
-        <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <rect x="5" y="10" width="38" height="30" rx="5"/>
-          <circle cx="17" cy="21" r="4"/>
-          <path d="M5 34l11-9 8 7 6-5 13 11"/>
-        </svg>
-        <span class="photo__label">Photo to be added</span>
-      </figcaption>
-    </figure>
+    <figure class="photo photo--wide has-image rise" style="--d:140ms"><img class="photo__img" src="assets/events-space.jpg" alt="The rear events space under the glazed roof" loading="lazy"></figure>
   </div>
 </section>
 
@@ -847,122 +776,14 @@ ${dome}
           <path fill="#FFD699" d="M24 4c-8 0-14 6-14 13.6C10 28 24 44 24 44s14-16 14-26.4C38 10 32 4 24 4Z"/>
           <circle cx="24" cy="17.5" r="5.4" fill="#7A2F00"/>
         </svg>
-        <p class="h-md">Bookings are open.</p>
+        <p class="h-md">Planning an event?</p>
       </div>
       <p style="opacity:.82;margin-top:18px;font-size:.96rem">
-        Afternoon tea must be booked a day ahead.
+        Table booking is not available at present. For the rear events space, send us an enquiry and we will reply by email.
       </p>
       <div class="btn-row" style="margin-top:18px">
-        <a href="#" class="btn btn--solid" data-book>Book a table</a>
+        <a href="#/private-hire" class="btn btn--solid">Make an enquiry</a>
       </div>
-    </div>
-  </div>
-</section>
-`;
-
-/* ========================== ALL DAY ========================== */
-const MENUS = `
-<section class="slice slice--cream pagehead">
-  <div class="wrap">
-    <p class="eyebrow">Food</p>
-    <h1>Menus</h1>
-    <p>Served through the day, with afternoon tea from two o'clock. The kitchen runs from opening until close.</p>
-  </div>
-</section>
-
-${dome}
-
-<section class="slice slice--brown" style="padding-top:20px">
-  <div class="wrap wrap--narrow">
-    <p class="eyebrow rise" style="text-align:center">Served all day</p>
-
-    ${group('French toast', 'Brioche french toast with the finest DOP Isigny Sainte-Mère butter', [
-      row('Maple &amp; Cinnamon Butter' + v),
-      row('Strawberries &amp; Cream' + v),
-      row('Crispy Panko Chicken &amp; Hot Honey Butter'),
-      row('BBQ Teriyaki Pork with Umami Salt &amp; Pepper')
-    ], '14.9')}
-
-    ${group('Classics', 'Available all day', [
-      row('Avocado on Toast with Sancho Pepper' + vg, '9.5'),
-      row('Pistachio Crumb Acai Bowl' + vg, '12.9'),
-      row('Black Truffle Eggs Benedict on Brioche', '14.9')
-    ])}
-
-    ${group('Petit plates', 'Petit, or wee, or little', [
-      row("6 Duck a L&rsquo;orange Dumplings"),
-      row("6 Spinach a L&rsquo;orange Dumplings" + vg),
-      row('French Onion Soup with Wildfarmed Sourdough' + v)
-    ], '9.5')}
-
-    ${allergenBlock('french toast and classics 2, 4, 7, 9, 10, 11, 12, 14. Petit plates 1, 2, 3, 4, 9, 10, 11, 12, 13, 14')}
-  </div>
-</section>
-
-<section class="slice slice--cream" id="afternoon-tea">
-  <div class="wrap wrap--narrow">
-    <div class="tea-head rise">
-      <p class="eyebrow">From two o'clock</p>
-      <h2>Afternoon tea</h2>
-      <p class="tea-price">49 per person, or 52 with alcohol free sparkling chardonnay</p>
-      <p class="tea-book">Afternoon tea must be booked a day ahead.</p>
-    </div>
-
-    <div class="tea-grid">
-      <div class="tea-col rise">
-        <h3>Surf &amp; turf</h3>
-        <p class="tea-col__note">Nine canapés</p>
-        <ul>
-          <li>Blini with Cream Cheese, Smoked Salmon &amp; Lemon</li>
-          <li>Basil Cream Cheese &amp; Prawn on Spinach Bread</li>
-          <li>Horseradish Cream Cheese &amp; Crayfish on Lemon &amp; Basil Cake</li>
-          <li>Bresaola, Mustard &amp; Honey Cheese with Flaxseeds on Special Grain Bread</li>
-          <li>Semi-Dried Cherry Tomato, Goat's Cheese &amp; Pecan on Walnut Bread</li>
-          <li>Courgette, Cheese, Ham &amp; Red Pepper on Tomato Bread</li>
-          <li>Comté, Semi-Dried Apricot &amp; Almond Profiterole</li>
-          <li>Crab, Cucumber &amp; Trout Roe Profiterole</li>
-          <li>Fig, Brie &amp; Pea Semolina on Spiced Bread</li>
-        </ul>
-        <p class="tea-col__foot">Allergens 1, 2, 3, 4, 5, 7, 8, 9, 11, 12, 13, 14</p>
-      </div>
-
-      <div class="tea-or rise" style="--d:40ms"><span>or</span></div>
-
-      <div class="tea-col tea-col--veg rise" style="--d:80ms">
-        <h3>Vegetarian</h3>
-        <p class="tea-col__note">Seven canapés</p>
-        <ul>
-          <li>Polenta with Courgette &amp; Cherry Tomato</li>
-          <li>Horseradish Cream Cheese &amp; Paprika on Spinach Bread</li>
-          <li>Goat's Cheese, Almond &amp; Pistachio Choux Pastry</li>
-          <li>Aubergine, Ewe's Cheese &amp; Almond on Sandwich Bread with Fig &amp; Hazelnut</li>
-          <li>Fromage Frais, Piquillo Pepper &amp; Black Olive on Curry Sandwich Bread</li>
-          <li>Tomato &amp; Basil with Grilled Vegetables on Walnut Bread</li>
-          <li>Mini Brioche with Creamed Brie, Apple, Fig &amp; Hazelnut</li>
-        </ul>
-        <p class="tea-col__foot">Allergens 1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 14</p>
-      </div>
-
-      <div class="tea-col tea-col--sweet rise" style="--d:160ms">
-        <h3>Scone &amp; bon bons</h3>
-        <p class="tea-col__note">To finish</p>
-        <ul>
-          <li>Plain scone, Isigny Sainte-Mère butter &amp; strawberry preserve</li>
-          <li>Doughnut bon bons: apple, red fruit, pistachio</li>
-        </ul>
-        <p class="tea-col__foot">Allergens 2, 4, 7, 10, 12, 14</p>
-
-        <h3 style="margin-top:26px">Loose leaf tea</h3>
-        <p class="tea-col__note">Choose one</p>
-        <p class="tea-teas">Breakfast, Decaf, French Earl Grey, Apple &amp; Cinnamon, Yunnan Green, Peppermint, Chai, Islay Whisky</p>
-      </div>
-    </div>
-
-    ${allergenBlock('')}
-
-    <div class="btn-row rise" style="justify-content:center">
-      <a href="#" class="btn btn--solid" data-book>Book a table</a>
-      <a href="#/matcha-and-coffee" class="btn btn--ghost">Matcha and coffee</a>
     </div>
   </div>
 </section>
@@ -974,7 +795,7 @@ const DRINKS = `
   <div class="wrap">
     <p class="eyebrow">The counter</p>
     <h1>Matcha &amp; coffee</h1>
-    <p>Open all day, no booking required. Our Yunnan washed house blend carries notes of jasmine, plum and red berry. Loose leaf tea from Edinburgh's Pekoe, and ceremonial grade matcha whisked to order.</p>
+    <p>No booking required. Our Yunnan washed house blend carries notes of jasmine, plum and red berry. Loose leaf tea from Edinburgh's Pekoe, and ceremonial grade matcha whisked to order.</p>
   </div>
 </section>
 
@@ -1004,8 +825,8 @@ ${domeMatcha}
     ${allergenBlock('')}
 
     <div class="btn-row rise" style="justify-content:center">
-      <a href="#/menus" class="btn btn--solid">See the food menus</a>
-      <a href="#/visit" class="btn btn--ghost">Opening hours</a>
+      <a href="#/visit" class="btn btn--solid">Opening hours</a>
+      <a href="#/private-hire" class="btn btn--ghost">Events space</a>
     </div>
   </div>
 </section>
@@ -1031,11 +852,10 @@ const VISIT = `
         <div class="hours__row"><span>Sunday</span><span class="tabular">09:00 to 17:00</span></div>
       </div>
       <p class="rise" style="--d:140ms;margin-top:24px;opacity:.82;max-width:42ch">
-        Walk ins are welcome for the all day menu and the counter. Afternoon tea must be booked a day ahead.
-        For parties of eight or more, and for private hire, please use the enquiry form and we will arrange it with you.
+        Walk ins are welcome at the counter. For events in the rear space, please use the enquiry form and we will arrange it with you.
       </p>
       <div class="btn-row rise" style="--d:180ms">
-        <a href="#/private-hire" class="btn btn--ghost">Private hire and larger bookings</a>
+        <a href="#/private-hire" class="btn btn--ghost">Events enquiries</a>
         <a href="https://maps.google.com/?q=10B+Queensferry+Street+Edinburgh" target="_blank" rel="noopener" class="btn btn--ghost">Open in maps</a>
         <a href="tel:+447428066656" class="btn btn--ghost">07428 066656</a>
       </div>
@@ -1046,13 +866,13 @@ const VISIT = `
           <path fill="#FFD699" d="M24 4c-8 0-14 6-14 13.6C10 28 24 44 24 44s14-16 14-26.4C38 10 32 4 24 4Z"/>
           <circle cx="24" cy="17.5" r="5.4" fill="#7A2F00"/>
         </svg>
-        <p class="h-md">Book a table.</p>
+        <p class="h-md">Planning an event?</p>
       </div>
       <p style="opacity:.82;margin-top:18px;font-size:.96rem">
-        Select your service and a time that suits, and we will confirm your table.
+        The rear events space seats up to fifty. Send us the details and we will reply by email.
       </p>
       <div class="btn-row" style="margin-top:18px">
-        <a href="#" class="btn btn--solid" data-book>Book a table</a>
+        <a href="#/private-hire" class="btn btn--solid">Make an enquiry</a>
       </div>
     </div>
   </div>
@@ -1091,9 +911,9 @@ ${dome}
 const PRIVATE_HIRE = `
 <section class="slice slice--cream pagehead">
   <div class="wrap">
-    <p class="eyebrow">Larger bookings</p>
-    <h1>Private hire</h1>
-    <p>Parties of eight and above, a section of the room, or the whole of Brioche for the day.</p>
+    <p class="eyebrow">Private events</p>
+    <h1>Events space</h1>
+    <p>The rear of Brioche, seating up to fifty, with catering and music available.</p>
   </div>
 </section>
 
@@ -1102,16 +922,16 @@ const PRIVATE_HIRE = `
 
     <div class="hire-kinds rise">
       <div class="hire-kind">
-        <h3>A larger table</h3>
-        <p>Eight guests and above, seated together on the all day menu or on afternoon tea. The rest of the room stays open as usual.</p>
+        <h3>The space</h3>
+        <p>A tall room at the rear of Brioche, under a glazed roof. It seats up to fifty guests and is available for private events for the next six months.</p>
       </div>
       <div class="hire-kind">
-        <h3>An area of the room</h3>
-        <p>A section of the café held for your party, with the counter and the remaining tables still trading. Suited to a gathering of roughly twelve to thirty.</p>
+        <h3>Food and drink</h3>
+        <p>Catering is available. Drinks are non alcoholic only. We will send the options with our reply.</p>
       </div>
       <div class="hire-kind">
-        <h3>The whole venue</h3>
-        <p>Brioche closed to the public and given over to you, with the bar and the kitchen at your disposal. Available for daytime and evening bookings.</p>
+        <h3>Music</h3>
+        <p>The room has a sound system, and an in-house DJ and band are available if you would like them.</p>
       </div>
     </div>
 
@@ -1119,8 +939,7 @@ const PRIVATE_HIRE = `
       <h2 class="h-md">Tell us what you have in mind.</h2>
       <p style="margin-top:10px;opacity:.85">
         Send the details below and we will reply by email to confirm. Nothing is held
-        until you hear from us. For a table of fewer than eight, please use the
-        booking button and reserve in the usual way.
+        until you hear from us.
       </p>
     </div>
 
@@ -1136,9 +955,9 @@ const PRIVATE_HIRE = `
           <div class="field" data-f="kind">
             <label for="f-kind">What you are after</label>
             <select id="f-kind" name="kind" required>
-              <option value="large_table">A larger table</option>
-              <option value="area">An area of the room</option>
-              <option value="whole_venue">The whole venue</option>
+              <option value="large_table">A group booking</option>
+              <option value="area">Part of the events space</option>
+              <option value="whole_venue">The whole events space</option>
             </select>
             <span class="field__err">Please choose one.</span>
           </div>
@@ -1170,9 +989,9 @@ const PRIVATE_HIRE = `
           </div>
           <div class="field" data-f="guests">
             <label for="f-guests">Number of guests</label>
-            <input id="f-guests" name="guests" type="number" min="8" max="200" step="1" required>
-            <span class="field__err">Eight guests or more, please.</span>
-            <span class="hint">Eight is the minimum for this form.</span>
+            <input id="f-guests" name="guests" type="number" min="8" max="50" step="1" required>
+            <span class="field__err">Between eight and fifty guests, please.</span>
+            <span class="hint">The space seats up to fifty.</span>
           </div>
         </div>
 
@@ -1226,12 +1045,12 @@ ${dome}
         <p>We would rather have an approximate figure now and a confirmed one nearer the date than wait for certainty before starting.</p>
       </div>
       <div class="beat rise" style="--d:100ms">
-        <div class="beat__when">Food</div>
-        <h3>Menus for a group</h3>
-        <p>Large parties usually order from a shortened version of the all day menu, or take afternoon tea. We will send the options with our reply.</p>
+        <div class="beat__when">Food and music</div>
+        <h3>Catering and entertainment</h3>
+        <p>Catering is available, with non alcoholic drinks only. A DJ and a band can be arranged. We will send the options with our reply.</p>
       </div>
       <div class="beat rise" style="--d:200ms">
-        <div class="beat__when">The room</div>
+        <div class="beat__when">The space</div>
         <h3>Held, not booked</h3>
         <p>An enquiry does not hold the room. Your booking is made when you have our email confirming it.</p>
       </div>
@@ -1245,48 +1064,39 @@ const notFound = `
   <div class="wrap">
     <p class="eyebrow">Sorry</p>
     <h1>Page not found</h1>
-    <p>That page could not be found. Our menus are linked below.</p>
+    <p>That page could not be found. The main pages are linked below.</p>
     <div class="btn-row" style="justify-content:center">
       <a href="#/" class="btn btn--solid">Back to the home page</a>
-      <a href="#/menus" class="btn btn--ghost">See the menus</a>
+      <a href="#/matcha-and-coffee" class="btn btn--ghost">See the drinks</a>
     </div>
   </div>
 </section>`;
 
 const ROUTES = {
   '/': HOME,
-  '/menus': MENUS,
-  /* old links keep working */
-  '/all-day': MENUS,
-  '/afternoon-tea': MENUS,
   '/matcha-and-coffee': DRINKS,
   '/visit': VISIT,
   '/private-hire': PRIVATE_HIRE,
-  /* #/book opens the booking panel over the home page */
-  '/book': HOME,
-  '/booking': HOME,
-  '/reserve': HOME,
-  /* likely guesses at the URL all land in the right place */
+  /* old links keep working and land somewhere sensible */
+  '/menus': DRINKS,
+  '/all-day': DRINKS,
+  '/afternoon-tea': DRINKS,
+  '/book': PRIVATE_HIRE,
+  '/booking': PRIVATE_HIRE,
+  '/reserve': PRIVATE_HIRE,
   '/private': PRIVATE_HIRE,
   '/groups': PRIVATE_HIRE,
   '/events': PRIVATE_HIRE
 };
 
 const TITLES = {
-  '/all-day': 'Menus — Brioche, Edinburgh',
-  '/afternoon-tea': 'Menus — Brioche, Edinburgh',
-  '/': 'Brioche — French and Japanese inspired, Queensferry Street, Edinburgh',
-  '/menus': 'Menus — Brioche, Edinburgh',
-  '/matcha-and-coffee': 'Matcha and coffee — Brioche, Edinburgh',
-  '/visit': 'Visit — Brioche, 10B Queensferry Street, Edinburgh',
-  '/private-hire': 'Private hire and larger bookings — Brioche, Edinburgh',
-  '/book': 'Book a table | Brioche, Edinburgh',
-  '/booking': 'Book a table | Brioche, Edinburgh',
-  '/reserve': 'Book a table | Brioche, Edinburgh',
-  '/private': 'Private hire and larger bookings — Brioche, Edinburgh',
-  '/groups': 'Private hire and larger bookings — Brioche, Edinburgh',
-  '/events': 'Private hire and larger bookings — Brioche, Edinburgh'
+  '/': 'Brioche | Coffee, matcha and pastry, Queensferry Street, Edinburgh',
+  '/matcha-and-coffee': 'Matcha and coffee | Brioche, Edinburgh',
+  '/visit': 'Visit | Brioche, 10B Queensferry Street, Edinburgh',
+  '/private-hire': 'Events space | Brioche, Edinburgh'
 };
+['/menus','/all-day','/afternoon-tea'].forEach(k=>TITLES[k]=TITLES['/matcha-and-coffee']);
+['/book','/booking','/reserve','/private','/groups','/events'].forEach(k=>TITLES[k]=TITLES['/private-hire']);
 
 const app = document.getElementById('app');
 let firstRender = true;
@@ -1303,7 +1113,7 @@ function render(){
     document.title = 'Brioche | Opening soon on Queensferry Street, Edinburgh';
   }else{
     app.innerHTML = ROUTES[path] || notFound;
-    document.title = TITLES[path] || 'Brioche — Edinburgh';
+    document.title = TITLES[path] || 'Brioche | Edinburgh';
   }
   window.scrollTo(0,0);
   document.querySelectorAll('.nav__links a[href^="#/"]').forEach(a=>{
@@ -1314,7 +1124,7 @@ function render(){
   closeMenu();
   mountHireForm();
   track('$pageview', {route: path});
-  const wantsBooking = ['/book','/booking','/reserve'].includes(path);
+  const wantsBooking = false; /* table booking is off for now */
   if(!wantsBooking) closeBooking();
   if(firstRender){ firstRender = false; runIntro(); }
   if(wantsBooking){
@@ -1530,7 +1340,7 @@ function mountHireForm(){
     if(v.phone.replace(/[^0-9]/g,'').length < 9) errs.push('phone');
     if(!v.event_date || new Date(v.event_date) < today) errs.push('event_date');
     if(!v.start_time) errs.push('start_time');
-    if(!(v.guests >= 8 && v.guests <= 200)) errs.push('guests');
+    if(!(v.guests >= 8 && v.guests <= 50)) errs.push('guests');
     if(!form.consent.checked) errs.push('consent');
 
     ['name','email','phone','event_date','start_time','guests','consent','kind'].forEach(k=>bad(k, errs.includes(k)));
